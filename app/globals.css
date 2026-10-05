@@ -1,0 +1,915 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-iron-black: #0a0a0a;
+  --color-iron-red: #d7192a;
+  --color-iron-red-dark: #b51322;
+  --color-iron-900: #1a1a1a;
+  --color-iron-500: #6b6b6b;
+  --color-iron-100: #e8e8e8;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow), "Arial Narrow", sans-serif;
+}
+
+:root {
+  --header-h: 88px;
+  --header-h-compact: 68px;
+  --marquee-h: 52px;
+  --gutter: 20px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 48px;
+    --marquee-h: 60px;
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --gutter: 72px;
+  }
+}
+
+@layer base {
+html {
+  background: var(--color-iron-black);
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--color-iron-black);
+  color: #fff;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-iron-red);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-iron-red);
+  outline-offset: 2px;
+}
+
+/* Anchored sections land below the fixed header. */
+[id] {
+  scroll-margin-top: var(--header-h-compact);
+}
+}
+
+/* Component styles live in a layer so Tailwind utilities (e.g. `hidden`) win. */
+@layer components {
+
+/* ---------- Skip link ---------- */
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: 100;
+  padding: 12px 18px;
+  background: #fff;
+  color: var(--color-iron-black);
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--color-iron-red);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-iron-red-dark);
+}
+
+.btn-ghost {
+  border: 1px solid rgb(255 255 255 / 0.45);
+  color: #fff;
+  background: rgb(10 10 10 / 0.25);
+  backdrop-filter: blur(6px);
+}
+
+.btn-ghost:hover {
+  border-color: #fff;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.btn-arrow {
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.btn:hover .btn-arrow,
+.btn:focus-visible .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: var(--header-h);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.site-header[data-hidden="true"] {
+  transform: translateY(-100%);
+}
+
+/* Shrinking is done with transforms (88px -> 68px) so it never shifts layout. */
+.header-bg {
+  position: absolute;
+  inset: 0;
+  background: rgb(10 10 10 / 0.8);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  opacity: 0;
+  transform: translateY(calc(var(--header-h-compact) - var(--header-h)));
+  transition: opacity 0.3s ease;
+}
+
+.header-inner {
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.site-header[data-scrolled="true"] .header-bg {
+  opacity: 1;
+}
+
+.site-header[data-scrolled="true"] .header-inner {
+  transform: translateY(calc((var(--header-h-compact) - var(--header-h)) / 2));
+}
+
+.site-header[data-scrolled="true"] .header-logo {
+  transform: scale(0.88);
+}
+
+.header-logo {
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.85);
+  text-shadow: 0 1px 14px rgb(10 10 10 / 0.55);
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  height: 2px;
+  background: var(--color-iron-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.nav-link:hover,
+.nav-link[aria-current="location"] {
+  color: #fff;
+}
+
+.nav-link:hover::after,
+.nav-link[aria-current="location"]::after {
+  transform: scaleX(1);
+}
+
+/* Hamburger -> X */
+.burger-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 2px;
+  margin-left: -12px;
+  background: #fff;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.2s ease;
+}
+
+.burger-bar:nth-child(1) {
+  transform: translateY(-7px);
+}
+
+.burger-bar:nth-child(3) {
+  transform: translateY(7px);
+}
+
+[aria-expanded="true"] > .burger-bar:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+[aria-expanded="true"] > .burger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+[aria-expanded="true"] > .burger-bar:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+/* ---------- Mobile menu ---------- */
+.mobile-menu {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.mobile-menu[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.mobile-menu[data-open="true"] .mobile-menu-item {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * 55ms + 120ms);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--color-iron-black);
+
+  /* Art direction: one source of truth for the photo AND the LED overlay.
+     --focus-x/y: 0 = show left/top edge, 1 = right/bottom (like object-position)
+     --zoom:      > 1 crops in further than plain "cover"
+     --shift-x:   pushes the photo right, leaving black under the left gradient
+     --led-k:     SVG user units per CSS px (refined by HeroIntro at runtime) */
+  /* 375×812: wall logo on the left third, red bench seat on the right */
+  --focus-x: 0.55;
+  --focus-y: 0.5;
+  --zoom: 1;
+  --shift-x: 0px;
+  --led-k: 2.3;
+}
+
+@media (min-width: 640px) {
+  .hero {
+    --focus-x: 0.45;
+    --led-k: 1.9;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop: the photo is shifted right by 22% of the width so the wall logo
+     lands at ~65-75%, past the end of the left gradient and clear of the H1,
+     while part of the red bench stays in frame. */
+  .hero {
+    --zoom: 1.08;
+    --focus-x: 0;
+    --focus-y: 0.06;
+    --shift-x: 22cqw;
+    --led-k: 1.6;
+  }
+}
+
+/* The photo ends where the (opaque) marquee starts. Besides being exact, this
+   keeps the image from covering the full viewport, which Chromium would treat
+   as a background and exclude from LCP. */
+.hero-media {
+  position: absolute;
+  inset: 0 0 var(--marquee-h);
+  overflow: hidden;
+  container-type: size;
+}
+
+/* A 4:3 box that "covers" the media area exactly like object-fit: cover would,
+   positioned with --focus-x/y. Image and SVG both live inside it, so the
+   drawn lines sit on the real ceiling strips at every viewport. */
+.hero-stage {
+  --stage-w: calc(max(100cqw, 100cqh * 4 / 3) * var(--zoom));
+  --stage-h: calc(max(100cqh, 100cqw * 3 / 4) * var(--zoom));
+  position: absolute;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  left: calc((100cqw - var(--stage-w)) * var(--focus-x) + var(--shift-x));
+  top: calc((100cqh - var(--stage-h)) * var(--focus-y));
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+@media (min-width: 1024px) {
+  /* Fade the photo's left edge into the black so the shift has no seam. */
+  .hero-stage {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 16%);
+    mask-image: linear-gradient(to right, transparent, #000 16%);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  /* Parallax start state; HeroIntro scrubs it to scale(1) on scroll. */
+  .hero-stage {
+    transform: scale(1.06);
+  }
+}
+
+.hero-img {
+  object-fit: cover;
+}
+
+.led-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Lit state: 1.5px white core + 6px white bloom at 15%, blurred.
+   Widths are in SVG user units, so they are scaled by --led-k. */
+.led-group {
+  opacity: 0.9;
+}
+
+.led-line {
+  fill: none;
+  stroke: #fff;
+  stroke-width: calc(1.5 * var(--led-k));
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.led-bloom {
+  fill: none;
+  stroke: #fff;
+  stroke-opacity: 0.15;
+  stroke-width: calc(6 * var(--led-k));
+  stroke-linecap: round;
+}
+
+.hero-dim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-iron-black);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 1. top: header legibility over the bright ceiling
+     2. left: the copy column always sits on near-black
+     3. bottom: phones stack the copy over the photo, so the whole text zone
+        (up to just above the eyebrow) is shaded; the logo may sit behind it */
+  --overlay-top: linear-gradient(to bottom, rgb(10 10 10 / 0.7) 0, rgb(10 10 10 / 0) 180px);
+  --overlay-left: linear-gradient(to right, rgb(10 10 10 / 0.95) 0%, rgb(10 10 10 / 0.7) 40%, rgb(10 10 10 / 0) 65%);
+  background:
+    var(--overlay-top),
+    var(--overlay-left),
+    linear-gradient(to top, rgb(10 10 10 / 0.95) 0%, rgb(10 10 10 / 0.88) 50%, rgb(10 10 10 / 0.82) 66%, rgb(10 10 10 / 0) 82%);
+}
+
+@media (min-width: 640px) {
+  /* Tablet: the copy starts lower, so the shade stops below the wall logo. */
+  .hero-overlay {
+    background:
+      var(--overlay-top),
+      var(--overlay-left),
+      linear-gradient(to top, rgb(10 10 10 / 0.95) 0%, rgb(10 10 10 / 0.85) 40%, rgb(10 10 10 / 0.72) 50%, rgb(10 10 10 / 0) 60%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-overlay {
+    background:
+      var(--overlay-top),
+      var(--overlay-left),
+      linear-gradient(to top, rgb(10 10 10 / 0.85) 0%, rgb(10 10 10 / 0.4) 22%, rgb(10 10 10 / 0) 42%);
+  }
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(56px, 11vw, 148px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  /* room for the mask reveal without clipping glyph overshoot */
+  padding-block: 0.04em;
+  margin-block: -0.04em;
+}
+
+.hero-line-inner {
+  display: inline-block;
+  /* optical alignment: cancel Barlow's left side-bearing so the ink of
+     "A"/"S" lines up exactly with the header logo and the eyebrow square */
+  margin-left: -0.008em;
+}
+
+.status-dot-live {
+  position: relative;
+}
+
+.status-dot-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  animation: status-pulse 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+
+@keyframes status-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* ---------- Section reveal (SectionReveal.tsx) ---------- */
+.sr-line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.04em;
+  margin-block: -0.04em;
+}
+
+.sr-line-inner {
+  display: inline-block;
+}
+
+/* ---------- Servizi: carousel (< 1024px) / expanding panels (>= 1024px) ---------- */
+
+.panels {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-inline: var(--gutter);
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.panels::-webkit-scrollbar {
+  display: none;
+}
+
+.panel {
+  position: relative;
+  flex: 0 0 85vw;
+  height: 480px;
+  scroll-snap-align: start;
+}
+
+.panel-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  overflow: hidden;
+  isolation: isolate;
+  background: #141414;
+}
+
+.panel-media {
+  position: absolute;
+  inset: 0;
+}
+
+.panel-img {
+  object-fit: cover;
+  filter: brightness(0.72);
+}
+
+.panel-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgb(10 10 10 / 0.92) 0%, rgb(10 10 10 / 0.6) 40%, rgb(10 10 10 / 0) 68%);
+}
+
+.panel-index {
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  z-index: 2;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-iron-red);
+}
+
+.panel-vtitle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel-content {
+  position: relative;
+  width: 100%;
+  padding: 24px 24px 30px;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 9vw, 52px);
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.panel-trigger {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+/* The trigger covers the whole panel: click anywhere, ring around the panel. */
+.panel-trigger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.panel-trigger:focus-visible {
+  outline: none;
+}
+
+/* Ring on the panel itself: the title (and its ::after) is transparent while
+   a desktop panel is collapsed, so it can't carry the outline. */
+.panel:has(.panel-trigger:focus-visible) {
+  outline: 2px solid var(--color-iron-red);
+  outline-offset: 2px;
+}
+
+.panel-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.panel-link {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--color-iron-red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.panel-link:hover .btn-arrow,
+.panel-link:focus-visible .btn-arrow {
+  transform: translateX(4px);
+}
+
+.panel-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-iron-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.panel[data-lit="true"] .panel-line {
+  transform: scaleX(1);
+}
+
+@media (min-width: 1024px) {
+  .panels {
+    height: 620px;
+    gap: 8px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .panel {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+    transition: flex-grow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .panel[data-active="true"] {
+    flex-grow: 5;
+  }
+
+  .panel-img {
+    filter: brightness(0.3);
+    transform: scale(1.08);
+    transition:
+      filter 0.6s ease,
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .panel[data-active="true"] .panel-img {
+    filter: brightness(0.95);
+    transform: scale(1);
+  }
+
+  .panel-vtitle {
+    position: absolute;
+    left: 50%;
+    bottom: 32px;
+    z-index: 2;
+    opacity: 1;
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: translateX(-50%) rotate(180deg);
+    transition: opacity 0.25s ease;
+  }
+
+  .panel[data-active="true"] .panel-vtitle {
+    opacity: 0;
+  }
+
+  /* Fixed width so the copy never reflows while the panel grows. */
+  .panel-content {
+    width: clamp(380px, 36vw, 600px);
+    padding: 36px 40px 44px;
+  }
+
+  .panel-title {
+    font-size: clamp(40px, 3.6vw, 60px);
+  }
+
+  .panel-title,
+  .panel-body {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .panel[data-active="true"] :is(.panel-title, .panel-body) {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.25s;
+  }
+
+  .panel[data-active="true"] .panel-body {
+    transition-delay: 0.33s;
+  }
+
+  .panel-line {
+    transition-delay: 0.2s;
+  }
+}
+
+/* Typographic cards (Yoga, Nutrizione) */
+.type-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #141414;
+}
+
+.type-art[data-tint="warm"] {
+  background:
+    radial-gradient(120% 80% at 75% 15%, rgb(255 168 96 / 0.11), rgb(255 168 96 / 0) 60%),
+    #141414;
+}
+
+.type-art[data-tint="red"] {
+  background:
+    radial-gradient(120% 80% at 75% 15%, rgb(215 25 42 / 0.17), rgb(215 25 42 / 0) 60%),
+    #141414;
+}
+
+.type-art-word {
+  position: absolute;
+  left: -0.03em;
+  bottom: 30%;
+  font-family: var(--font-display);
+  font-size: clamp(150px, 15vw, 250px);
+  font-weight: 800;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.25);
+}
+
+.type-led {
+  position: absolute;
+  top: 13%;
+  left: 10%;
+  width: 80%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.3));
+}
+
+.type-led line {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.3);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.type-led line:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.type-led line:nth-child(3) {
+  transition-delay: 0.24s;
+}
+
+.type-led line:nth-child(4) {
+  transition-delay: 0.36s;
+}
+
+/* Only once JS can light them again: unlit while the panel is inactive. */
+.services-panels[data-armed="true"] .panel:not([data-lit="true"]) .type-led line {
+  stroke-dashoffset: 1;
+  transition-duration: 0.3s;
+  transition-delay: 0s;
+}
+
+/* ---------- Marquee ---------- */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Intro: "Accendi le luci" ----------
+   html[data-intro] is set by an inline script before first paint:
+   full = first visit this session, fade = later visits, none = reduced motion.
+   Only opacity/transform/filter are touched; all text stays in the DOM. */
+html[data-intro="full"] .hero-img {
+  filter: brightness(0.2);
+}
+
+html[data-intro="full"] .hero-dim {
+  opacity: 0.55;
+}
+
+html[data-intro="full"] .led-line {
+  stroke-dashoffset: 1;
+}
+
+html[data-intro="full"] .led-group {
+  opacity: 1;
+}
+
+html[data-intro="full"] .led-bloom-group {
+  opacity: 0;
+}
+
+html[data-intro="full"] [data-reveal] {
+  opacity: 0;
+}
+
+html[data-intro="full"] .hero-line-inner {
+  transform: translateY(110%);
+}
+
+html[data-intro="fade"] :is([data-reveal], .hero-line-inner) {
+  animation: intro-fade 0.3s ease-out both;
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .status-dot-live::after {
+    animation: none;
+  }
+
+  .panel,
+  .panel-img,
+  .panel-title,
+  .panel-body,
+  .panel-line,
+  .type-led line {
+    transition: none !important;
+  }
+
+  .mobile-menu-item {
+    transform: none;
+  }
+}
+}
