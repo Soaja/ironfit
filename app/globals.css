@@ -1123,6 +1123,265 @@ body {
   }
 }
 
+/* ---------- Team ---------- */
+.team-banner-img {
+  object-position: 58% 50%;
+}
+
+@media (min-width: 1024px) {
+  .team-banner-img {
+    object-position: 50% 18%;
+  }
+}
+
+.tcards {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-inline: var(--gutter);
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.tcards::-webkit-scrollbar {
+  display: none;
+}
+
+.tcard {
+  position: relative;
+  flex: 0 0 78vw;
+  aspect-ratio: 4 / 5;
+  perspective: 1400px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 640px) {
+  .tcard {
+    flex-basis: 44vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tcards {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .tcard {
+    flex: 0 0 calc((100% - 32px) / 3);
+  }
+}
+
+@media (min-width: 1280px) {
+  .tcard {
+    flex-basis: calc((100% - 64px) / 5);
+  }
+}
+
+/* Overlay toggle (aria-pressed) under the faces; links on the back sit above it. */
+.tcard-toggle {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  background: transparent;
+}
+
+.tcard-toggle:focus-visible {
+  outline: none;
+}
+
+.tcard:has(.tcard-toggle:focus-visible) {
+  outline: 2px solid var(--color-iron-red);
+  outline-offset: 3px;
+}
+
+.tcard-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tcard-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #141414;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.tcard-back {
+  transform: rotateY(180deg);
+}
+
+.tcard[data-flipped="true"] .tcard-inner {
+  transform: rotateY(180deg);
+}
+
+.tcard-link {
+  pointer-events: none;
+}
+
+.tcard[data-flipped="true"] .tcard-link {
+  pointer-events: auto;
+}
+
+/* Mouse devices: flip on hover / keyboard focus (touch uses the tap toggle). */
+@media (hover: hover) and (pointer: fine) {
+  .tcard:is(:hover, :focus-within) .tcard-inner {
+    transform: rotateY(180deg);
+    transition-delay: 0.12s;
+  }
+
+  .tcard:is(:hover, :focus-within) .tcard-link {
+    pointer-events: auto;
+  }
+
+  .tcard:hover .tcard-img {
+    transform: scale(1.04);
+  }
+
+  .tcard:hover .tcard-line {
+    transform: scaleX(1);
+  }
+}
+
+.tcard-img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tcard-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(10 10 10 / 0.92) 0%, rgb(10 10 10 / 0.45) 32%, rgb(10 10 10 / 0) 55%);
+}
+
+.tcard-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-iron-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tcard-led {
+  position: absolute;
+  top: 12%;
+  left: 10%;
+  width: 80%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.25));
+}
+
+.tcard-led line {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.16);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* ---------- Quiz "Trova il tuo percorso" ---------- */
+.quiz-panel {
+  position: relative;
+  padding: 26px 20px 30px;
+  background: #141414;
+}
+
+@media (min-width: 640px) {
+  .quiz-panel {
+    padding: 40px 44px 44px;
+  }
+}
+
+.quiz-led {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.45));
+}
+
+.quiz-led line {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.6);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.quiz-option {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.02);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.quiz-option:hover {
+  border-color: rgb(255 255 255 / 0.35);
+}
+
+.quiz-option:has(input:checked) {
+  border-color: var(--color-iron-red);
+  background: rgb(215 25 42 / 0.1);
+}
+
+.quiz-option:has(input:focus-visible) {
+  outline: 2px solid var(--color-iron-red);
+  outline-offset: 2px;
+}
+
+.quiz-back {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.7);
+}
+
+.quiz-back:hover {
+  color: #fff;
+}
+
+.quiz-step {
+  animation: quiz-in 0.35s ease-out both;
+}
+
+@keyframes quiz-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
 /* ---------- Marquee ---------- */
 .marquee-track {
   display: flex;
@@ -1198,8 +1457,51 @@ html[data-intro="fade"] :is([data-reveal], .hero-line-inner) {
   }
 
   .wod-list,
-  .seg-colon-blink {
+  .seg-colon-blink,
+  .quiz-step {
     animation: none;
+  }
+
+  .quiz-led line {
+    transition: none;
+  }
+
+  /* Team cards: crossfade instead of the 3D flip. */
+  .tcard .tcard-inner {
+    transform: none !important;
+    transition: none;
+  }
+
+  .tcard-back {
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .tcard-front {
+    transition: opacity 0.25s ease;
+  }
+
+  .tcard[data-flipped="true"] .tcard-back {
+    opacity: 1;
+  }
+
+  .tcard[data-flipped="true"] .tcard-front {
+    opacity: 0;
+  }
+
+  .tcard-img {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .tcard:is(:hover, :focus-within) .tcard-back {
+    opacity: 1;
+  }
+
+  .tcard:is(:hover, :focus-within) .tcard-front {
+    opacity: 0;
   }
 
   .mobile-menu-item {

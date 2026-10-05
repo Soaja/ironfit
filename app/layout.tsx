@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter, Permanent_Marker } from "next/font/google";
 import type { DayOfWeek, ExerciseGym, WithContext } from "schema-dts";
-import { gym, services, type DayCode } from "@/data/gym";
+import { gym, isPlaceholder, services, team, type DayCode } from "@/data/gym";
 import "./globals.css";
 
 const barlow = Barlow_Condensed({
@@ -79,6 +79,16 @@ const SCHEMA_DAYS: Record<DayCode, DayOfWeek> = {
   Su: "https://schema.org/Sunday",
 };
 
+// Only trainers with real names are published (never "[NOME]").
+const employees = team
+  .filter((t) => !isPlaceholder(t.name))
+  .map((t) => ({
+    "@type": "Person" as const,
+    name: t.name,
+    ...(isPlaceholder(t.role) ? {} : { jobTitle: t.role }),
+    image: `${gym.url}${t.portrait.src}`,
+  }));
+
 const jsonLd: WithContext<ExerciseGym> = {
   "@context": "https://schema.org",
   "@type": "ExerciseGym",
@@ -107,6 +117,7 @@ const jsonLd: WithContext<ExerciseGym> = {
   })),
   sameAs: Object.values(gym.social),
   areaServed: gym.areaServed.map((name) => ({ "@type": "City", name })),
+  ...(employees.length ? { employee: employees } : {}),
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Servizi IRONFIT",

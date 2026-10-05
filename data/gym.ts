@@ -275,3 +275,167 @@ export const functionalPhotos = [
     alt: "Air bike e dischi Eleiko nell'area functional di IRONFIT a Ribera",
   },
 ] as const;
+
+/** True for unfilled data like "[NOME]" — never publish these (JSON-LD, links). */
+export function isPlaceholder(value: string | undefined): boolean {
+  return !value || /^\[.*\]$/.test(value.trim());
+}
+
+// ---------------------------------------------------------------------------
+// Team. Names, roles, bios and certifications are placeholders until the gym
+// sends the real data. `tags` drive the quiz matching (lib/recommend.ts).
+// ---------------------------------------------------------------------------
+export type QuizGoal = "dimagrimento" | "forza" | "ipertrofia" | "benessere";
+export type QuizExperience = "principiante" | "intermedio" | "esperto";
+export type QuizPreference = "sala" | "functional" | "personal" | "yoga";
+export type TeamTag = QuizGoal | QuizExperience | "tonificazione" | "functional" | "resistenza";
+
+export type Trainer = {
+  id: string;
+  name: string;
+  role: string;
+  specialty: string;
+  bio: string;
+  certifications: string[];
+  tags: TeamTag[];
+  /** studio portrait; `focus` = object-position on the face */
+  portrait: { src: string; focus: string };
+  /** in action with a member (card back) */
+  actionPhoto?: { src: string; focus: string };
+  instagram?: string;
+};
+
+const trainerPlaceholders = {
+  name: "[NOME]",
+  role: "[RUOLO]",
+  specialty: "[SPECIALITÀ]",
+  bio: "[BIO, max 160 caratteri]",
+  certifications: ["[CERTIFICAZIONE]"],
+  instagram: "[INSTAGRAM]",
+};
+
+export const team: Trainer[] = [
+  {
+    id: "trainer-01",
+    ...trainerPlaceholders,
+    tags: ["dimagrimento", "tonificazione", "principiante"],
+    portrait: { src: "/images/team/trainer-01.jpg", focus: "50% 18%" },
+  },
+  {
+    id: "trainer-02",
+    ...trainerPlaceholders,
+    tags: ["forza", "ipertrofia", "esperto"],
+    portrait: { src: "/images/team/trainer-02.jpg", focus: "50% 18%" },
+    actionPhoto: { src: "/images/coaching/coaching-03.jpg", focus: "40% 30%" },
+  },
+  {
+    id: "trainer-03",
+    ...trainerPlaceholders,
+    tags: ["functional", "resistenza", "intermedio"],
+    portrait: { src: "/images/team/trainer-03.jpg", focus: "50% 18%" },
+    actionPhoto: { src: "/images/coaching/coaching-04.jpg", focus: "32% 40%" },
+  },
+  {
+    id: "trainer-04",
+    ...trainerPlaceholders,
+    tags: ["ipertrofia", "principiante", "intermedio"],
+    portrait: { src: "/images/team/trainer-04.jpg", focus: "50% 18%" },
+    actionPhoto: { src: "/images/coaching/coaching-01.jpg", focus: "35% 35%" },
+  },
+  {
+    id: "trainer-05",
+    ...trainerPlaceholders,
+    tags: ["functional", "dimagrimento", "benessere"],
+    portrait: { src: "/images/team/trainer-05.jpg", focus: "50% 16%" },
+  },
+];
+
+export function trainerWhatsappHref(trainer: Trainer) {
+  return whatsappHref(`Ciao! Vorrei allenarmi con ${trainer.name} a IRONFIT.`);
+}
+
+// ---------------------------------------------------------------------------
+// Quiz "Trova il tuo percorso"
+// ---------------------------------------------------------------------------
+export type QuizIcon =
+  | "scale" | "dumbbell" | "muscle" | "heart"
+  | "level1" | "level2" | "level3"
+  | "solo" | "group" | "coach" | "breath";
+
+export const quiz = {
+  questions: [
+    {
+      id: "goal",
+      title: "Qual è il tuo obiettivo?",
+      options: [
+        { value: "dimagrimento", label: "Perdere peso", icon: "scale" },
+        { value: "forza", label: "Diventare più forte", icon: "dumbbell" },
+        { value: "ipertrofia", label: "Aumentare la massa", icon: "muscle" },
+        { value: "benessere", label: "Stare meglio, muovermi di più", icon: "heart" },
+      ],
+    },
+    {
+      id: "experience",
+      title: "Che esperienza hai?",
+      options: [
+        { value: "principiante", label: "Mai allenato / ricomincio", icon: "level1" },
+        { value: "intermedio", label: "Mi alleno da un po'", icon: "level2" },
+        { value: "esperto", label: "Mi alleno seriamente", icon: "level3" },
+      ],
+    },
+    {
+      id: "preference",
+      title: "Come ti piace allenarti?",
+      options: [
+        { value: "sala", label: "Da solo, con un programma", icon: "solo" },
+        { value: "functional", label: "In gruppo, con energia", icon: "group" },
+        { value: "personal", label: "Seguito uno a uno", icon: "coach" },
+        { value: "yoga", label: "Con calma, mobilità e respiro", icon: "breath" },
+      ],
+    },
+  ],
+  /** preference -> service id (see `services`) */
+  serviceFor: {
+    sala: "sala-pesi",
+    functional: "functional-training",
+    personal: "personal-training",
+    yoga: "yoga",
+  } satisfies Record<QuizPreference, string>,
+  /** short labels used in the explanation and the WhatsApp message */
+  goalLabel: {
+    dimagrimento: "perdere peso",
+    forza: "diventare più forte",
+    ipertrofia: "aumentare la massa",
+    benessere: "stare meglio",
+  } satisfies Record<QuizGoal, string>,
+  experienceLabel: {
+    principiante: "principiante",
+    intermedio: "intermedio",
+    esperto: "esperto",
+  } satisfies Record<QuizExperience, string>,
+  preferenceLabel: {
+    sala: "da solo con un programma",
+    functional: "in gruppo",
+    personal: "uno a uno",
+    yoga: "con calma",
+  } satisfies Record<QuizPreference, string>,
+  /** Explanation, line 1: by preference; {goal} = "per perdere peso" etc. */
+  preferenceLine: {
+    sala: "In sala pesi segui un programma su misura {goal}, ai tuoi orari e con i trainer sempre a portata di mano.",
+    functional: "Le lezioni di functional sono il modo più coinvolgente {goal}: allenamenti di gruppo, intensi e mai uguali.",
+    personal: "Con il personal training hai un trainer tutto per te {goal}, con un programma costruito sui tuoi tempi.",
+    yoga: "Lo yoga lavora su mobilità, respiro ed equilibrio: la base giusta {goal}, al tuo ritmo.",
+  } satisfies Record<QuizPreference, string>,
+  goalPhrase: {
+    dimagrimento: "per perdere peso",
+    forza: "per diventare più forte",
+    ipertrofia: "per aumentare la massa",
+    benessere: "per stare meglio e muoverti di più",
+  } satisfies Record<QuizGoal, string>,
+  /** Explanation, line 2: by experience */
+  experienceLine: {
+    principiante: "Si parte dalle basi: tecnica, carichi giusti e nessuna fretta.",
+    intermedio: "Hai già una base: ora servono struttura e una progressione chiara.",
+    esperto: "Ti alleni sul serio: ti serve qualcuno che ti spinga oltre il plateau.",
+  } satisfies Record<QuizExperience, string>,
+};
