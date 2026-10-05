@@ -1,7 +1,6 @@
 // Anchor targets for sections that are not built yet, so in-page links
 // (nav, Servizi CTAs) never point at nothing. Replace one by one.
 const PLACEHOLDERS = [
-  { id: "functional", label: "Functional" },
   { id: "team", label: "Team" },
   { id: "galleria", label: "Galleria" },
   { id: "orari", label: "Orari" },

@@ -106,4 +106,52 @@ for (const [id, src] of Object.entries(SERVICES)) {
     .toFile(`public/images/services/${id}.jpg`);
 }
 
+// Functional area: a warmer grade (this space has warm indirect LED light).
+// More contrast, slightly less saturation, cool daylight pulled toward amber.
+async function gradeWarm(input, { width, height, vignette = 0.25 }) {
+  const { data, info } = await input.raw().toBuffer({ resolveWithObject: true });
+  const { channels } = info;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * channels;
+      let r = data[i] / 255;
+      let g = data[i + 1] / 255;
+      let b = data[i + 2] / 255;
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      r = lum + (r - lum) * 0.72 + 0.036;
+      g = lum + (g - lum) * 0.72 + 0.006;
+      b = lum + (b - lum) * 0.72 - 0.05;
+      const d = Math.hypot((x - width / 2) / (width * 0.62), (y - height * 0.48) / (height * 0.66));
+      const vig = 1 - vignette * smoothstep(0.55, 1.15, d);
+      const out = [r, g, b].map((c) => {
+        c = Math.max(0, c) ** 1.16;
+        c = c + 0.6 * c * (1 - c) * (c - 0.45);
+        return Math.round(Math.min(1, Math.max(0, c * vig)) * 255);
+      });
+      data[i] = out[0];
+      data[i + 1] = out[1];
+      data[i + 2] = out[2];
+    }
+  }
+  return sharp(data, { raw: { width, height, channels } });
+}
+
+const FUNCTIONAL = {
+  "fx-room": { src: "public/images/functional/functional-01.jpg" },
+  // Detail: the real WOD written in orange marker on the mirror.
+  "fx-mirror": { src: "public/images/functional/functional-02.jpg", crop: { left: 430, top: 440, width: 640, height: 640 } },
+  "fx-rings": { src: "public/images/functional/functional-03.jpg" },
+  "fx-bikes": { src: "public/images/functional/functional-05.jpg" },
+  "fx-rowers": { src: "public/images/functional/functional-06.jpg" },
+};
+for (const [id, { src, crop }] of Object.entries(FUNCTIONAL)) {
+  let img = sharp(src).rotate();
+  img = crop ? img.extract(crop) : img.resize({ width: 1600 });
+  img = img.removeAlpha();
+  const { info } = await img.clone().raw().toBuffer({ resolveWithObject: true });
+  await (await gradeWarm(img, { width: info.width, height: info.height, vignette: crop ? 0.15 : 0.25 }))
+    .jpeg({ quality: 82, mozjpeg: true })
+    .toFile(`public/images/functional-web/${id}.jpg`);
+}
+
 console.log("done");

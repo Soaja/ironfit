@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Functional from "@/components/Functional";
 import Hero from "@/components/Hero";
 import PlaceholderSections from "@/components/PlaceholderSections";
 import Services from "@/components/Services";
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <TrustBar />
         <Services />
+        <Functional />
         <PlaceholderSections />
       </main>
     </>

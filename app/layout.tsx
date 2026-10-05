@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Barlow_Condensed, Inter, Permanent_Marker } from "next/font/google";
 import type { DayOfWeek, ExerciseGym, WithContext } from "schema-dts";
 import { gym, services, type DayCode } from "@/data/gym";
 import "./globals.css";
@@ -18,7 +18,18 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const title = "Palestra a Ribera | IRONFIT – Sala pesi, Functional e Personal Trainer";
+// WOD card handwriting (the marker on the mirror). Not preloaded, and only
+// applied once the Functional section is near the viewport (see globals.css),
+// so it never competes with the hero on first load.
+const marker = Permanent_Marker({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-marker",
+});
+
+const title ="Palestra a Ribera | IRONFIT – Sala pesi, Functional e Personal Trainer";
 const description =
   "Palestra a Ribera con macchinari Panatta, area functional e personal trainer. IRONFIT ti aspetta: prenota la tua prova gratuita.";
 
@@ -106,6 +117,14 @@ const jsonLd: WithContext<ExerciseGym> = {
         name: s.name,
         description: s.description,
         ...(s.kind === "photo" ? { image: `${gym.url}${s.image.src}` } : {}),
+        ...(s.details
+          ? {
+              url: `${gym.url}/#${s.details.sectionId}`,
+              serviceType: s.details.serviceType,
+              audience: { "@type": "PeopleAudience", audienceType: s.details.audience },
+              category: s.details.equipment.join(", "),
+            }
+          : {}),
       },
     })),
   },
@@ -117,7 +136,7 @@ const introScript = `(function(){var d=document.documentElement,m="full";try{if(
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="it" className={`${barlow.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="it" className={`${barlow.variable} ${inter.variable} ${marker.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: introScript }} />
         <script
