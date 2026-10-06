@@ -163,7 +163,6 @@ export const navLinks = [
   { id: "functional", label: "Functional" },
   { id: "team", label: "Team" },
   { id: "orari", label: "Orari" },
-  { id: "prezzi", label: "Prezzi" },
   { id: "contatti", label: "Contatti" },
 ] as const;
 
@@ -236,7 +235,7 @@ export const services: Service[] = [
     name: "Yoga",
     description:
       "Mobilità, respiro, equilibrio. Il complemento perfetto all'allenamento con i pesi.",
-    cta: { label: "Orari yoga", href: "#orari" },
+    cta: { label: "Scopri lo yoga", href: "/yoga" },
     kind: "type",
     tint: "warm",
   },
@@ -245,7 +244,7 @@ export const services: Service[] = [
     name: "Nutrizione",
     description:
       "Un piano alimentare costruito su di te, per far rendere ogni allenamento.",
-    cta: { label: "Prenota una consulenza", href: whatsappHref(gym.nutritionMessage), external: true },
+    cta: { label: "Scopri la nutrizione", href: "/nutrizione" },
     kind: "type",
     tint: "red",
   },
@@ -612,3 +611,71 @@ export const faq: { q: string; a: string }[] = [
 ];
 
 export const needsConfirmation = (text: string) => text.includes("[DA CONFERMARE]");
+
+// ---------------------------------------------------------------------------
+// Service pages: /yoga and /nutrizione. General copy (benefits, focus areas)
+// is editorial and should be approved by the gym; anything about how the gym
+// actually works is flagged `confirmed: false` and shown as "indicativo".
+// ---------------------------------------------------------------------------
+export const yogaPage = {
+  whatsappMessage: "Ciao! Vorrei provare una lezione di yoga a IRONFIT.",
+  benefits: [
+    { title: "Mobilità", text: "Più ampiezza di movimento: squat più profondi, spalle più libere, meno rigidità dopo i pesi." },
+    { title: "Respiro", text: "Impari a respirare sotto sforzo e a calmarti dopo. Serve in sala, serve fuori." },
+    { title: "Recupero", text: "Una sessione lenta tra un allenamento intenso e l'altro: il corpo recupera, la testa si svuota." },
+    { title: "Controllo", text: "Equilibrio, stabilità e core: più consapevolezza del corpo, meno movimenti sbagliati." },
+  ],
+  audience: [
+    { title: "Chi si allena con i pesi", text: "Il complemento che ti mancava per muoverti meglio e recuperare prima." },
+    { title: "Chi parte da zero", text: "Si comincia con calma, una posizione alla volta. Nessuno ti giudica." },
+    { title: "Chi vuole stare meglio", text: "Un'ora per te: respiro lento, telefono lontano, schiena che ringrazia." },
+  ],
+};
+
+export type NutritionGoal = { id: string; label: string; title: string; text: string; focus: string[] };
+
+export const nutritionPage = {
+  /** The process steps describe how the gym works: show "indicativo" until confirmed. */
+  stepsConfirmed: false,
+  goals: [
+    {
+      id: "dimagrire",
+      label: "Dimagrire",
+      title: "Perdere peso, senza fame.",
+      text: "Niente diete lampo: un piano che puoi seguire davvero, costruito sui tuoi orari e sui tuoi gusti.",
+      focus: ["Calorie giuste per te, senza estremi", "Proteine per non perdere muscolo", "Abitudini che durano oltre l'estate"],
+    },
+    {
+      id: "massa",
+      label: "Mettere massa",
+      title: "Crescere, non solo ingrassare.",
+      text: "Allenarsi duro non basta: serve il carburante giusto, nei momenti giusti.",
+      focus: ["Surplus controllato, non casuale", "Proteine distribuite nella giornata", "Pasti pratici intorno all'allenamento"],
+    },
+    {
+      id: "performance",
+      label: "Performance",
+      title: "Più energia in ogni WOD.",
+      text: "Per chi fa functional o si allena tanto: mangiare per rendere e recuperare.",
+      focus: ["Energia prima dell'allenamento", "Recupero e idratazione dopo", "Gestione dei giorni più intensi"],
+    },
+    {
+      id: "benessere",
+      label: "Stare meglio",
+      title: "Mangiare bene, senza complicarsi la vita.",
+      text: "Più energia durante la giornata e un rapporto più sereno con il cibo.",
+      focus: ["Pasti equilibrati e semplici", "Spesa e preparazione furbe", "Piccoli cambiamenti, risultati veri"],
+    },
+  ] satisfies NutritionGoal[],
+  steps: [
+    { title: "Primo incontro", text: "Parliamo di obiettivi, abitudini, orari e di come ti alleni." },
+    { title: "Piano su misura", text: "Un piano alimentare costruito su di te, realistico da seguire ogni giorno." },
+    { title: "Controlli", text: "Verifichiamo i progressi e aggiustiamo il piano quando serve." },
+  ],
+};
+
+/** Trainer name for a schedule entry — only once it's a real name (never "[NOME]"). */
+export function coachName(id?: string) {
+  const name = team.find((t) => t.id === id)?.name;
+  return name && !isPlaceholder(name) ? name : undefined;
+}

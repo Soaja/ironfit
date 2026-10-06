@@ -6,7 +6,13 @@ import { FacebookIcon, InstagramIcon, WhatsAppIcon } from "./Icons";
 import Logo from "./Logo";
 import NapAddress from "./NapAddress";
 
-const NAV = [...navLinks, { id: "galleria", label: "Galleria" }, { id: "faq", label: "FAQ" }];
+const NAV = [
+  ...navLinks.map((l) => ({ href: `/#${l.id}`, label: l.label })),
+  { href: "/#galleria", label: "Galleria" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/yoga", label: "Yoga" },
+  { href: "/nutrizione", label: "Nutrizione" },
+];
 
 function Social({ href, label, children }: { href?: string; label: string; children: React.ReactNode }) {
   // Profiles still to be filled in are not shown (no dead links).
@@ -55,8 +61,8 @@ export default function Footer() {
           <h2 className="footer-h">Naviga</h2>
           <ul className="grid gap-2">
             {NAV.map((l) => (
-              <li key={l.id}>
-                <a href={`/#${l.id}`} className="footer-link">
+              <li key={l.href}>
+                <a href={l.href} className="footer-link">
                   {l.label}
                 </a>
               </li>

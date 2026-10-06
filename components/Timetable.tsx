@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type TouchEvent } from "react";
-import { contact, gym, LEVEL_LABEL, schedule, whatsappHref, type GymClass } from "@/data/gym";
+import { coachName, contact, gym, LEVEL_LABEL, schedule, whatsappHref, type GymClass } from "@/data/gym";
 import { addressOneLine } from "@/lib/contact";
 import { useGymClock } from "@/hooks/useGymClock";
 import { bookingMessage, buildIcs, dayName, hoursForDay, toMinutes } from "@/lib/schedule";
 import { WhatsAppIcon } from "./Icons";
-import { coachName } from "./NextClassCard";
 
 // Weekly class calendar.
 // - Filters: toggle buttons (aria-pressed), mirrored in the URL (#orari?corso=yoga).

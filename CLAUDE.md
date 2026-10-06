@@ -19,6 +19,7 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 - `lib/` — funzioni pure testate: `schedule.ts` (orari, Europe/Rome via Intl, .ics, next class, summarizeHours), `contact.ts` (link, NAP, validazione form, rate limit, email), `recommend.ts` (quiz), `content.ts` (FAQ link, stelle, JSON-LD FAQ), `workoutTimer.ts`, `wod.ts`.
 - `app/page.tsx` — ordine sezioni. `app/layout.tsx` — font, metadata, JSON-LD ExerciseGym + FAQPage, script intro.
 - `app/api/contact/route.ts` — form → Resend. `app/privacy`, `app/cookie` — pagine legali (shell).
+- `app/yoga`, `app/nutrizione` — pagine servizio: `components/sub/` (SubPageShell con `--accent`, SubHero, SubSection) + contenuti in `yogaPage` / `nutritionPage` (gym.ts).
 - `components/` — una sezione per file (Hero, Services, Functional, Team, Percorso, Orari, Galleria, Recensioni, Faq, FinalCta, Contatti, Footer, MobileActionBar…). Client solo dove serve interazione.
 - `components/LedLines.tsx` — coordinate `LED_SEGMENTS` tracciate sulle vere strisce LED del soffitto (master 2560×1920).
 
@@ -59,7 +60,6 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 | Team | ✅ | flip card, dati trainer placeholder |
 | Quiz "Trova il tuo percorso" | ✅ | `lib/recommend.ts`, 48 combinazioni testate |
 | Orari | ✅ | **calendario corsi di esempio** (`schedule.isExample = true`) |
-| Prezzi | ⬜ | in attesa dei prezzi; resta `<section id="prezzi">` vuota (PlaceholderSections) |
 | Galleria | ✅ | 15 foto, lightbox |
 | Recensioni | ✅ | stato vuoto (solo CTA) finché non ci sono dati reali |
 | FAQ | ✅ | 4 risposte `[DA CONFERMARE]` escluse dal JSON-LD |
@@ -69,5 +69,7 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 | Mobile sticky bar | ✅ | |
 | /privacy | 🟡 | shell con placeholder testo, noindex (`legal.pagesReady`) |
 | /cookie | 🟡 | come /privacy |
-| /yoga | ⬜ | non iniziata |
-| /nutrizione | ⬜ | non iniziata |
+| /yoga | ✅ | accento salvia #5FBFA3, "Respira con noi" (box breathing, `lib/breath.ts`), lezioni da `schedule` |
+| /nutrizione | ✅ | accento rosso, selettore obiettivi (tabs), 3 passi "indicativo" (`nutritionPage.stepsConfirmed`) |
+
+**Prezzi: rimossa per scelta del cliente** (nessuna sezione, nessun link). Non ricrearla.

@@ -11,7 +11,6 @@ import MobileActionBar from "@/components/MobileActionBar";
 import Orari from "@/components/Orari";
 import Percorso from "@/components/Percorso";
 import Team from "@/components/Team";
-import PlaceholderSections from "@/components/PlaceholderSections";
 import Services from "@/components/Services";
 import TrustBar from "@/components/TrustBar";
 
@@ -36,7 +35,6 @@ export default function Home() {
         <Galleria />
         <Recensioni />
         <Faq />
-        <PlaceholderSections />
         <FinalCta />
         <Contatti />
       </main>

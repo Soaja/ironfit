@@ -10,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [`${gym.url}${gym.images.hero}`],
     },
+    ...(["yoga", "nutrizione"] as const).map((p) => ({
+      url: `${gym.url}/${p}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     // Legal pages only once their real text is in (they are noindex until then).
     ...(legal.pagesReady
       ? (["privacy", "cookie"] as const).map((p) => ({

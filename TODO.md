@@ -42,20 +42,23 @@ Tutti i valori si inseriscono in `data/gym.ts` (unica fonte di verità).
 - [ ] Testi Privacy Policy e Cookie Policy (servizio professionale, es. iubenda) → poi `legal.pagesReady = true`
 - [ ] Link crediti OSTOIA&CO (`[URL OSTOIA]`)
 
-### Prezzi
-- [ ] Listino abbonamenti / corsi / personal training (sezione Prezzi non costruita)
-- [ ] Fascia di prezzo per JSON-LD (`[FASCIA DI PREZZO]`)
+### Prezzi (sezione rimossa per scelta)
+- [ ] Fascia di prezzo solo per JSON-LD (`[FASCIA DI PREZZO]`), opzionale
+
+### Pagine /yoga e /nutrizione
+- [ ] Approvare i testi editoriali (benefici yoga, "per chi è", obiettivi e focus nutrizione) in `yogaPage` / `nutritionPage`
+- [ ] Confermare il percorso nutrizione (3 passi) → `nutritionPage.stepsConfirmed = true`
+- [ ] Chi segue la nutrizione (nome/qualifica del professionista)? Oggi non mostrato
+- [ ] Foto reali di una lezione di yoga (le pagine oggi sono solo tipografiche)
 
 ## Prossimi passi tecnici
-1. Nessuna sezione parziale sulla home; completare le pagine legali appena arriva il testo.
-2. Pagine `/yoga` e `/nutrizione` (servizi senza foto, card tipografiche esistenti come punto di partenza).
-3. Sezione Prezzi (`#prezzi`, ora placeholder vuoto) quando arrivano i prezzi.
-4. QA completo: Lighthouse mobile su build di produzione, tutti i breakpoint (375/768/1024/1440/1920), accessibilità (tastiera, screen reader), validazione SEO/JSON-LD (Rich Results Test).
-5. Deploy su Vercel.
-6. Collegare il DNS di ironfitribera.it.
-7. Variabili Resend su Vercel: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` (dominio verificato); inviare un messaggio di prova.
-8. Google Search Console: verificare il dominio e inviare `/sitemap.xml`.
-9. Collegare il Google Business Profile (link mappe, recensioni, `hasMap`).
+1. Completare le pagine legali appena arriva il testo.
+2. QA completo: Lighthouse mobile su build di produzione, tutti i breakpoint (375/768/1024/1440/1920), accessibilità (tastiera, screen reader), validazione SEO/JSON-LD (Rich Results Test).
+3. Deploy su Vercel.
+4. Collegare il DNS di ironfitribera.it.
+5. Variabili Resend su Vercel: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` (dominio verificato); inviare un messaggio di prova.
+6. Google Search Console: verificare il dominio e inviare `/sitemap.xml`.
+7. Collegare il Google Business Profile (link mappe, recensioni, `hasMap`).
 
 ## Problemi noti
 - Lighthouse mobile Performance ~83–88 (Accessibility/Best Practices/SEO 100): il limite è il runtime Next/React (~120 KB gz). Da rimisurare in produzione su Vercel.

@@ -1,15 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { gym, isPlaceholder, schedule, team, whatsappHref } from "@/data/gym";
+import { coachName, gym, schedule, whatsappHref } from "@/data/gym";
 import { useGymClock } from "@/hooks/useGymClock";
 import { bookingMessage, dayName, formatUntil, nextClass } from "@/lib/schedule";
 import { WhatsAppIcon } from "./Icons";
-
-export function coachName(id?: string) {
-  const name = team.find((t) => t.id === id)?.name;
-  return name && !isPlaceholder(name) ? name : undefined;
-}
 
 // "Prossima lezione": computed from now (Europe/Rome), refreshed every minute.
 // Server renders a neutral line; the client fills it in after hydration.
