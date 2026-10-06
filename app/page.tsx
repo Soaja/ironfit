@@ -1,4 +1,7 @@
+import Faq from "@/components/Faq";
+import Galleria from "@/components/Galleria";
 import Header from "@/components/Header";
+import Recensioni from "@/components/Recensioni";
 import Functional from "@/components/Functional";
 import Hero from "@/components/Hero";
 import Orari from "@/components/Orari";
@@ -26,6 +29,9 @@ export default function Home() {
         <Team />
         <Percorso />
         <Orari />
+        <Galleria />
+        <Recensioni />
+        <Faq />
         <PlaceholderSections />
       </main>
     </>

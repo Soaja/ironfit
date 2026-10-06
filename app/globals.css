@@ -1762,6 +1762,324 @@ body {
   color: rgb(255 255 255 / 0.85);
 }
 
+/* ---------- Galleria ---------- */
+/* Masonry-style grid with spans: 1 feature (2×2) + tall shots (1×2) + the
+   rest (1×1), packed with `dense`, so columns end together. Row height is
+   tied to the column width (container units) for a ~4:3 cell. */
+.gal-wrap {
+  container-type: inline-size;
+}
+
+.gal {
+  --cols: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-auto-rows: calc((100cqw - (var(--cols) - 1) * 4px) / var(--cols) * 0.75);
+  grid-auto-flow: dense;
+  gap: 4px;
+}
+
+@media (min-width: 1024px) {
+  .gal {
+    --cols: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .gal {
+    --cols: 4;
+  }
+}
+
+.gal-item[data-shape="feature"] {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gal-item[data-shape="tall"] {
+  grid-row: span 2;
+}
+
+/* clip-path wipe on scroll (only once JS armed it) */
+.gal[data-armed="true"] .gal-item {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gal[data-armed="true"] .gal-item[data-shown="true"] {
+  clip-path: inset(0 0 0 0);
+}
+
+.gal-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.gal-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+.gal-img {
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gal-zone {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 5px 9px;
+  background: rgb(10 10 10 / 0.75);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.gal-btn:is(:hover, :focus-visible) .gal-img {
+  transform: scale(1.04);
+}
+
+.gal-btn:is(:hover, :focus-visible) .gal-zone {
+  opacity: 1;
+  transform: none;
+}
+
+/* lightbox */
+.lb {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(6 6 6 / 0.97);
+  color: #fff;
+}
+
+.lb::backdrop {
+  background: rgb(0 0 0 / 0.85);
+}
+
+.lb-body {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: max(12px, env(safe-area-inset-top)) var(--gutter) max(16px, env(safe-area-inset-bottom));
+}
+
+.lb-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lb-figure {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 0 0;
+}
+
+.lb-frame {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+  animation: tt-in 0.25s ease-out both;
+}
+
+.lb-caption {
+  max-width: 70ch;
+  margin-inline: auto;
+  text-align: center;
+  font-size: 14px;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.lb-nav {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  margin-top: -26px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background: rgb(10 10 10 / 0.6);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.lb-nav:hover {
+  border-color: #fff;
+}
+
+.lb-prev {
+  left: var(--gutter);
+}
+
+.lb-next {
+  right: var(--gutter);
+}
+
+@media (max-width: 639px) {
+  .lb-nav {
+    top: auto;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    margin-top: 0;
+  }
+
+  .lb-figure {
+    margin-bottom: 64px;
+  }
+}
+
+.lb-preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Recensioni ---------- */
+.rev-cta {
+  position: relative;
+  display: block;
+  padding: 32px 28px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgb(215 25 42 / 0.16), rgb(215 25 42 / 0) 70%),
+    #141414;
+  transition: border-color 0.25s ease;
+}
+
+.rev-cta:hover {
+  border-color: rgb(255 255 255 / 0.3);
+}
+
+.rev-cta:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.rev-card {
+  width: min(360px, 80vw);
+  flex-shrink: 0;
+  padding: 22px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: #141414;
+}
+
+.rev-row {
+  overflow: hidden;
+  padding-block: 6px;
+}
+
+.rev-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 60s linear infinite;
+}
+
+.rev-row[data-dir="right"] .rev-track {
+  animation-direction: reverse;
+}
+
+.rev-marquee:is(:hover, :focus-within) .rev-track {
+  animation-play-state: paused;
+}
+
+/* ---------- FAQ ---------- */
+.faq-list {
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.faq-item {
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.faq-q {
+  display: flex;
+  min-height: 64px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  list-style: none;
+}
+
+.faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.faq-q:hover h3 {
+  color: #fff;
+}
+
+.faq-q:focus-visible {
+  outline-offset: 4px;
+}
+
+.faq-icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  margin: -1px 0 0 -9px;
+  background: var(--color-iron-red);
+}
+
+.faq-icon::after {
+  transform: rotate(90deg);
+}
+
+/* "+" -> "×" (follows the intended state while animating) */
+.faq-item:is([open]:not([data-state="closed"]), [data-state="open"]) .faq-icon {
+  transform: rotate(135deg);
+}
+
+.faq-a {
+  padding: 0 44px 22px 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.faq-link {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--color-iron-red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
 /* ---------- Marquee ---------- */
 .marquee-track {
   display: flex;
@@ -1846,6 +2164,28 @@ html[data-intro="fade"] :is([data-reveal], .hero-line-inner) {
 
   .tt-block {
     transition: none;
+  }
+
+  .lb-frame {
+    animation: none;
+  }
+
+  .gal-img,
+  .gal-zone,
+  .faq-icon {
+    transition: none;
+  }
+
+  /* reviews: static wrapping grid instead of the marquee */
+  .rev-track {
+    width: auto;
+    flex-wrap: wrap;
+    animation: none;
+    padding-inline: var(--gutter);
+  }
+
+  .rev-track > [aria-hidden="true"] {
+    display: none;
   }
 
   .quiz-led line {

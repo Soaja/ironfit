@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter, Permanent_Marker } from "next/font/google";
 import type { DayOfWeek, ExerciseGym, WithContext } from "schema-dts";
-import { gym, isPlaceholder, services, team, type DayCode } from "@/data/gym";
+import { faq, gym, isPlaceholder, services, team, type DayCode } from "@/data/gym";
+import { faqJsonLd, hasRealRating } from "@/lib/content";
 import "./globals.css";
 
 const barlow = Barlow_Condensed({
@@ -80,6 +81,9 @@ const SCHEMA_DAYS: Record<DayCode, DayOfWeek> = {
 };
 
 // Only trainers with real names are published (never "[NOME]").
+// FAQPage from the same gym.ts data, without answers still "[DA CONFERMARE]".
+const faqLd = faqJsonLd(faq);
+
 const employees = team
   .filter((t) => !isPlaceholder(t.name))
   .map((t) => ({
@@ -118,6 +122,17 @@ const jsonLd: WithContext<ExerciseGym> = {
   sameAs: Object.values(gym.social),
   areaServed: gym.areaServed.map((name) => ({ "@type": "City", name })),
   ...(employees.length ? { employee: employees } : {}),
+  // Only with real Google numbers; never placeholders. No Review markup.
+  ...(hasRealRating(gym.reviews.googleRating, gym.reviews.googleCount)
+    ? {
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: gym.reviews.googleRating!,
+          reviewCount: gym.reviews.googleCount!,
+          bestRating: 5,
+        },
+      }
+    : {}),
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Servizi IRONFIT",
@@ -154,6 +169,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
+        {faqLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }}
+          />
+        )}
       </head>
       <body className="antialiased">{children}</body>
     </html>

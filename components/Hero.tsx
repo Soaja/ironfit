@@ -95,9 +95,9 @@ export default function Hero() {
           <span aria-hidden="true" className="absolute inset-y-0 left-0 w-0.5 bg-iron-red" />
           <p className="text-[15px] font-semibold leading-tight text-white">
             <span aria-hidden="true" className="mr-1.5 text-iron-red">★</span>
-            {gym.reviews.rating} su Google
+            {gym.reviews.googleRating?.toLocaleString("it-IT", { minimumFractionDigits: 1 }) ?? "[RATING]"} su Google
           </p>
-          <p className="mt-1 text-sm leading-tight text-white/70">{gym.reviews.count} recensioni</p>
+          <p className="mt-1 text-sm leading-tight text-white/70">{gym.reviews.googleCount ?? "[N]"} recensioni</p>
         </div>
       </div>
 

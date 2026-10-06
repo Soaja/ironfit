@@ -54,6 +54,14 @@ export type Wod = {
   note?: string;
 };
 
+export type Review = { author: string; text: string; rating: number; date?: string; source: "Google" };
+export type Reviews = {
+  googleRating?: number;
+  googleCount?: number;
+  googleReviewUrl: string;
+  items: Review[];
+};
+
 export const gym = {
   name: "IRONFIT",
   legalName: "[RAGIONE SOCIALE]",
@@ -122,11 +130,12 @@ export const gym = {
     { value: "[N]", unit: "giorni su 7", label: "aperti per te" },
   ] satisfies Stat[],
 
-  // Google Business Profile reviews — copy the real values, never estimate.
+  // Google Business Profile reviews — copy the real values, NEVER estimate.
+  // Leave googleRating/googleCount undefined until known; items start empty.
   reviews: {
-    rating: "[RATING]",
-    count: "[N]",
-  },
+    googleReviewUrl: "[LINK RECENSIONI GOOGLE]",
+    items: [],
+  } as Reviews,
 
   equipment: ["Panatta", "Eleiko", "Concept2"],
 
@@ -505,3 +514,89 @@ export const schedule: { isExample: boolean; categories: ScheduleCategory[]; cla
     { id: "sab-yoga", day: 6, start: "11:45", end: "12:45", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
   ],
 };
+
+// ---------------------------------------------------------------------------
+// Galleria. Web copies made by scripts/prepare-gallery.mjs (shared grade).
+// ---------------------------------------------------------------------------
+export type GalleryZone = "sala" | "macchinari" | "functional" | "coaching";
+
+export const GALLERY_ZONES: { id: GalleryZone; label: string }[] = [
+  { id: "sala", label: "Sala pesi" },
+  { id: "macchinari", label: "Macchinari" },
+  { id: "functional", label: "Functional" },
+  { id: "coaching", label: "Coaching" },
+];
+
+export type GalleryImage = { src: string; alt: string; zone: GalleryZone; width: number; height: number };
+
+export const gallery: GalleryImage[] = [
+  { src: "/images/gallery/sala-pesi-1.jpg", zone: "sala", width: 1800, height: 1350, alt: "Sala pesi IRONFIT a Ribera con rastrelliera di manubri, panca rossa e logo IRONFIT sulla parete" },
+  { src: "/images/gallery/functional-1.jpg", zone: "functional", width: 1800, height: 1200, alt: "Area functional di IRONFIT con pavimento in gomma, rig e luce LED calda a soffitto" },
+  { src: "/images/gallery/macchinari-1.jpg", zone: "macchinari", width: 1800, height: 1350, alt: "Macchinari Panatta con imbottiture rosse sotto le luci LED geometriche della sala" },
+  { src: "/images/gallery/coaching-2.jpg", zone: "coaching", width: 1066, height: 1600, alt: "Personal trainer di IRONFIT assiste un atleta alla panca piana su macchina Panatta" },
+  { src: "/images/gallery/sala-pesi-2.jpg", zone: "sala", width: 1800, height: 1350, alt: "Manubri, rack e panche regolabili nella sala pesi di IRONFIT Ribera" },
+  { src: "/images/gallery/functional-3.jpg", zone: "functional", width: 640, height: 640, alt: "Il WOD del giorno scritto con il pennarello arancione sullo specchio della sala functional" },
+  { src: "/images/gallery/functional-2.jpg", zone: "functional", width: 1800, height: 1200, alt: "Rig per trazioni e dischi colorati nell'area functional di IRONFIT" },
+  { src: "/images/gallery/macchinari-2.jpg", zone: "macchinari", width: 1800, height: 1350, alt: "Stazione cavi e macchinari Panatta nella sala di IRONFIT a Ribera" },
+  { src: "/images/gallery/coaching-1.jpg", zone: "coaching", width: 1600, height: 1066, alt: "Trainer di IRONFIT corregge la tecnica di un atleta su una macchina per la schiena" },
+  { src: "/images/gallery/sala-pesi-3.jpg", zone: "sala", width: 1800, height: 1350, alt: "Vista della sala pesi di IRONFIT con pilastro bianco e luci LED a soffitto" },
+  { src: "/images/gallery/functional-4.jpg", zone: "functional", width: 1800, height: 1200, alt: "Air bike e dischi Eleiko nell'area functional di IRONFIT a Ribera" },
+  { src: "/images/gallery/macchinari-3.jpg", zone: "macchinari", width: 1800, height: 1350, alt: "Macchinari Panatta Evo e panca nella sala di IRONFIT" },
+  { src: "/images/gallery/functional-5.jpg", zone: "functional", width: 1800, height: 1245, alt: "Parete per handstand push-up e anelli nella sala functional di IRONFIT" },
+  { src: "/images/gallery/coaching-3.jpg", zone: "coaching", width: 1600, height: 1066, alt: "Trainer di IRONFIT segue un atleta durante le dip alla macchina" },
+  { src: "/images/gallery/functional-6.jpg", zone: "functional", width: 1800, height: 1200, alt: "Vogatori Concept2, kettlebell e plyo box nell'area functional di IRONFIT" },
+];
+
+// ---------------------------------------------------------------------------
+// FAQ. Answers tied to the gym's real policy end with "[DA CONFERMARE]": they
+// are shown on the page but excluded from the FAQPage JSON-LD until confirmed.
+// Links: [testo](#anchor) — rendered as real anchors.
+// ---------------------------------------------------------------------------
+const continuato = gym.openingHours.every((s) => s.opens <= "09:00" && s.closes >= "21:00");
+
+export const faq: { q: string; a: string }[] = [
+  {
+    q: "Posso provare la palestra gratis?",
+    a: "Sì. La prima prova è gratuita e senza impegno: ti mostriamo la sala, conosci i trainer e ti alleni con noi. Scrivici su WhatsApp per scegliere giorno e ora.",
+  },
+  {
+    q: "Serve il certificato medico?",
+    a: "Per iscriversi serve un certificato medico per attività sportiva non agonistica in corso di validità. Puoi portarlo al momento dell'iscrizione. [DA CONFERMARE]",
+  },
+  {
+    q: "Non mi sono mai allenato: è un problema?",
+    a: "Assolutamente no. I trainer ti seguono dal primo giorno: tecnica, carichi giusti e un programma adatto al tuo livello. Se non sai da dove partire, fai il [test di 30 secondi](#percorso).",
+  },
+  {
+    q: "Che differenza c'è tra sala pesi e functional training?",
+    a: "In sala pesi ti alleni con il tuo programma, ai tuoi orari, su macchinari Panatta, manubri e bilancieri. Il functional training è una lezione di gruppo guidata da un coach, con esercizi a corpo libero, bilancieri, kettlebell e vogatori: intensa e sempre diversa. Vedi [i corsi in calendario](#orari).",
+  },
+  {
+    q: "Posso fare solo yoga o solo functional?",
+    a: "Sì, puoi scegliere un abbonamento solo per i corsi che ti interessano, senza la sala pesi. [DA CONFERMARE]",
+  },
+  {
+    q: "Avete il personal trainer?",
+    a: "Sì. Puoi allenarti uno a uno con un trainer, con un programma costruito su di te e obiettivi misurabili. [Conosci il team](#team) e scegli con chi iniziare.",
+  },
+  {
+    q: "Offrite consulenze di nutrizione?",
+    a: "Sì, puoi prenotare una consulenza per un piano alimentare costruito sui tuoi obiettivi e sul tuo allenamento. Modalità e costi della consulenza: [DA CONFERMARE]",
+  },
+  {
+    q: "Quali sono gli orari?",
+    a: continuato
+      ? "La sala è aperta con orario continuato. Trovi gli orari giorno per giorno e il calendario dei corsi nella sezione [Orari](#orari)."
+      : "Trovi gli orari giorno per giorno e il calendario dei corsi nella sezione [Orari](#orari).",
+  },
+  {
+    q: "C'è parcheggio?",
+    a: "Sì, è possibile parcheggiare nelle vicinanze della palestra. [DA CONFERMARE]",
+  },
+  {
+    q: "Come mi iscrivo?",
+    a: "Passa in palestra negli orari di apertura oppure scrivici su WhatsApp: ti spieghiamo le formule disponibili e fissiamo la tua prova gratuita.",
+  },
+];
+
+export const needsConfirmation = (text: string) => text.includes("[DA CONFERMARE]");
