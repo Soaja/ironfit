@@ -2,7 +2,6 @@
 // (nav, Servizi CTAs) never point at nothing. Replace one by one.
 const PLACEHOLDERS = [
   { id: "prezzi", label: "Prezzi" },
-  { id: "contatti", label: "Contatti" },
 ];
 
 export default function PlaceholderSections() {

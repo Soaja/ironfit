@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type TouchEvent } from "react";
-import { gym, LEVEL_LABEL, schedule, whatsappHref, type GymClass } from "@/data/gym";
+import { contact, gym, LEVEL_LABEL, schedule, whatsappHref, type GymClass } from "@/data/gym";
+import { addressOneLine } from "@/lib/contact";
 import { useGymClock } from "@/hooks/useGymClock";
 import { bookingMessage, buildIcs, dayName, hoursForDay, toMinutes } from "@/lib/schedule";
 import { WhatsAppIcon } from "./Icons";
@@ -136,14 +137,13 @@ export default function Timetable() {
   };
 
   const downloadIcs = (c: GymClass) => {
-    const a = gym.address;
     const ics = buildIcs({
       uid: `${c.id}@${new URL(gym.url).host}`,
       name: c.name,
       day: c.day,
       start: c.start,
       end: c.end,
-      location: `IRONFIT, ${a.streetAddress}, ${a.postalCode} ${a.addressLocality} ${a.addressRegion}`,
+      location: `IRONFIT, ${addressOneLine(contact.address)}`,
       description: [CATEGORY[c.category]?.label, c.level && LEVEL_LABEL[c.level], c.note, gym.url].filter(Boolean).join("\n"),
       now: new Date(),
     });

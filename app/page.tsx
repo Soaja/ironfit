@@ -1,9 +1,13 @@
+import Contatti from "@/components/Contatti";
 import Faq from "@/components/Faq";
+import FinalCta from "@/components/FinalCta";
+import Footer from "@/components/Footer";
 import Galleria from "@/components/Galleria";
 import Header from "@/components/Header";
 import Recensioni from "@/components/Recensioni";
 import Functional from "@/components/Functional";
 import Hero from "@/components/Hero";
+import MobileActionBar from "@/components/MobileActionBar";
 import Orari from "@/components/Orari";
 import Percorso from "@/components/Percorso";
 import Team from "@/components/Team";
@@ -33,7 +37,11 @@ export default function Home() {
         <Recensioni />
         <Faq />
         <PlaceholderSections />
+        <FinalCta />
+        <Contatti />
       </main>
+      <Footer />
+      <MobileActionBar />
     </>
   );
 }

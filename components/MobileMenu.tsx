@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties, type MouseEvent, type RefObject } from "react";
-import { gym, navLinks, telHref, whatsappHref } from "@/data/gym";
+import { contact, navLinks, telHref, whatsappHref } from "@/data/gym";
 import { InstagramIcon, PhoneIcon, WhatsAppIcon } from "./Icons";
 import LedLines from "./LedLines";
 
@@ -79,7 +79,7 @@ export default function MobileMenu({ open, activeId, toggleRef, onClose }: Props
   const actions = [
     { href: telHref(), label: "Chiama", Icon: PhoneIcon, external: false },
     { href: whatsappHref(), label: "WhatsApp", Icon: WhatsAppIcon, external: true },
-    { href: gym.social.instagram, label: "Instagram", Icon: InstagramIcon, external: true },
+    { href: contact.instagram, label: "Instagram", Icon: InstagramIcon, external: true },
   ];
 
   return (
@@ -100,7 +100,7 @@ export default function MobileMenu({ open, activeId, toggleRef, onClose }: Props
           {navLinks.map(({ id, label }, i) => (
             <li key={id} className="mobile-menu-item" style={{ "--i": i } as CSSProperties}>
               <a
-                href={`#${id}`}
+                href={`/#${id}`}
                 onClick={(e) => goTo(e, id)}
                 aria-current={activeId === id ? "location" : undefined}
                 className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2.75rem,13vw,4.5rem)] font-extrabold uppercase leading-[1] text-white aria-[current=location]:text-iron-red"

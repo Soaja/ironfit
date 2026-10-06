@@ -1,10 +1,10 @@
-import { gym, isPlaceholder } from "@/data/gym";
+import { contact, isPlaceholder } from "@/data/gym";
 import GalleryGrid from "./GalleryGrid";
 import { InstagramIcon } from "./Icons";
 import SectionReveal from "./SectionReveal";
 
 export default function Galleria() {
-  const ig = gym.social.instagram;
+  const ig = contact.instagram;
   return (
     <section id="galleria" aria-labelledby="galleria-title" className="relative overflow-clip bg-iron-black py-24 lg:py-32">
       <div className="hero-grain" aria-hidden="true" />

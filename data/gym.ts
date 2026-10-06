@@ -1,6 +1,9 @@
 // Single source of truth for IRONFIT business data.
 // Anything in [BRACKETS] is a placeholder that must be replaced before launch.
 
+// Explicit .ts extension: this file is also loaded by Node's test runner.
+import { telUrl, whatsappUrl } from "../lib/contact.ts";
+
 export type DayCode = "Mo" | "Tu" | "We" | "Th" | "Fr" | "Sa" | "Su";
 
 export type OpeningHours = {
@@ -62,37 +65,45 @@ export type Reviews = {
   items: Review[];
 };
 
+// ---------------------------------------------------------------------------
+// Contacts, legal, credits: the ONLY place these values live. UI, JSON-LD,
+// WhatsApp links, map links and .ics files all read from here.
+// ---------------------------------------------------------------------------
+export const contact = {
+  address: {
+    street: "[VIA E NUMERO]",
+    city: "Ribera",
+    province: "AG",
+    postalCode: "92016",
+    country: "IT",
+  },
+  geo: { lat: "[LAT]", lng: "[LNG]" },
+  phone: "[TELEFONO]",
+  whatsapp: "[NUMERO WHATSAPP, formato 39...]",
+  email: "[EMAIL]",
+  googleMapsUrl: "[LINK GOOGLE MAPS]",
+  instagram: "[INSTAGRAM]",
+  facebook: "[FACEBOOK]" as string | undefined,
+};
+
+export const legal = {
+  companyName: "[RAGIONE SOCIALE]",
+  vat: "[P.IVA]",
+  /** Flip to true once real Privacy/Cookie texts are in: removes noindex and adds the pages to the sitemap. */
+  pagesReady: false,
+};
+
+export const credits = { label: "Sito realizzato da OSTOIA&CO", url: "[URL OSTOIA]" };
+
 export const gym = {
   name: "IRONFIT",
-  legalName: "[RAGIONE SOCIALE]",
   url: "https://ironfitribera.it",
   timeZone: "Europe/Rome",
 
-  telephone: "[TELEFONO]",
-  // International format without "+" or spaces, e.g. 39333xxxxxxx
-  whatsapp: "[NUMERO]",
   whatsappMessage:
     "Ciao IRONFIT! Vorrei prenotare la prova gratuita. Quando posso passare?",
-  email: "[EMAIL]",
   priceRange: "[FASCIA DI PREZZO]",
-
-  address: {
-    streetAddress: "[INDIRIZZO]",
-    addressLocality: "Ribera",
-    addressRegion: "AG",
-    postalCode: "92016",
-    addressCountry: "IT",
-  },
-  geo: {
-    latitude: "[LATITUDINE]",
-    longitude: "[LONGITUDINE]",
-  },
   areaServed: ["Ribera", "Sciacca", "Agrigento"],
-
-  social: {
-    instagram: "[URL INSTAGRAM]",
-    facebook: "[URL FACEBOOK]",
-  },
 
   // [ORARI DA CONFERMARE] — example values only, used by the live status pill
   // and the JSON-LD. Replace with the real schedule before launch.
@@ -157,10 +168,10 @@ export const navLinks = [
 ] as const;
 
 // Where "Prova gratuita" CTAs point until a dedicated booking flow exists.
-export const trialHref = "#contatti";
+export const trialHref = "/#contatti";
 
 export function whatsappHref(message: string = gym.whatsappMessage) {
-  return `https://wa.me/${gym.whatsapp}?text=${encodeURIComponent(message)}`;
+  return whatsappUrl(contact.whatsapp, message);
 }
 
 // Single source for the Servizi section and the JSON-LD OfferCatalog.
@@ -240,8 +251,9 @@ export const services: Service[] = [
   },
 ];
 
+/** tel: link, or the Contatti section while the number is still a placeholder. */
 export function telHref() {
-  return `tel:${gym.telephone.replace(/\s+/g, "")}`;
+  return telUrl(contact.phone) ?? "/#contatti";
 }
 
 export const functionalService = services.find((s) => s.details?.sectionId === "functional")!;

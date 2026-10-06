@@ -79,7 +79,7 @@ export default function Header() {
               {navLinks.map(({ id, label }) => (
                 <li key={id}>
                   <a
-                    href={`#${id}`}
+                    href={`/#${id}`}
                     className="nav-link"
                     aria-current={activeId === id ? "location" : undefined}
                   >

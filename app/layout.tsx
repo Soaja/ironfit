@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter, Permanent_Marker } from "next/font/google";
 import type { DayOfWeek, ExerciseGym, WithContext } from "schema-dts";
-import { faq, gym, isPlaceholder, services, team, type DayCode } from "@/data/gym";
+import { contact, faq, gym, isPlaceholder, services, team, type DayCode } from "@/data/gym";
 import { faqJsonLd, hasRealRating } from "@/lib/content";
 import "./globals.css";
 
@@ -102,24 +102,29 @@ const jsonLd: WithContext<ExerciseGym> = {
   logo: `${gym.url}${gym.images.logo}`,
   image: `${gym.url}${gym.images.hero}`,
   description,
-  telephone: gym.telephone,
+  ...(isPlaceholder(contact.phone) ? {} : { telephone: contact.phone }),
+  ...(isPlaceholder(contact.email) ? {} : { email: contact.email }),
   priceRange: gym.priceRange,
+  // Same NAP fields as the visible <address> in Contatti and the footer.
   address: {
     "@type": "PostalAddress",
-    ...gym.address,
+    streetAddress: contact.address.street,
+    addressLocality: contact.address.city,
+    addressRegion: contact.address.province,
+    postalCode: contact.address.postalCode,
+    addressCountry: contact.address.country,
   },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: gym.geo.latitude,
-    longitude: gym.geo.longitude,
-  },
+  ...(isPlaceholder(contact.geo.lat) || isPlaceholder(contact.geo.lng)
+    ? {}
+    : { geo: { "@type": "GeoCoordinates", latitude: contact.geo.lat, longitude: contact.geo.lng } }),
+  ...(isPlaceholder(contact.googleMapsUrl) ? {} : { hasMap: contact.googleMapsUrl }),
   openingHoursSpecification: gym.openingHours.map((slot) => ({
     "@type": "OpeningHoursSpecification",
     dayOfWeek: slot.days.map((d) => SCHEMA_DAYS[d]),
     opens: slot.opens,
     closes: slot.closes,
   })),
-  sameAs: Object.values(gym.social),
+  sameAs: [contact.instagram, contact.facebook].filter((u): u is string => !isPlaceholder(u)),
   areaServed: gym.areaServed.map((name) => ({ "@type": "City", name })),
   ...(employees.length ? { employee: employees } : {}),
   // Only with real Google numbers; never placeholders. No Review markup.
@@ -158,7 +163,7 @@ const jsonLd: WithContext<ExerciseGym> = {
 
 // Runs before first paint: picks the intro mode so the CSS start state is
 // applied without a flash. Safety net: if JS/GSAP never arrives, reveal at 4s.
-const introScript = `(function(){var d=document.documentElement,m="full";try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)m="none";else if(sessionStorage.getItem("ironfit-intro"))m="fade";else sessionStorage.setItem("ironfit-intro","1")}catch(e){}d.dataset.intro=m;setTimeout(function(){if(d.dataset.intro==="full")d.dataset.intro="done"},4000)})();`;
+const introScript = `(function(){var d=document.documentElement,m="full";try{if(location.pathname!=="/")m="none";else if(matchMedia("(prefers-reduced-motion: reduce)").matches)m="none";else if(sessionStorage.getItem("ironfit-intro"))m="fade";else sessionStorage.setItem("ironfit-intro","1")}catch(e){}d.dataset.intro=m;setTimeout(function(){if(d.dataset.intro==="full")d.dataset.intro="done"},4000)})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

@@ -54,6 +54,19 @@ export default function SectionReveal({ target }: { target: string }) {
           // Parallax (desktop): [data-speed] elements drift at their own rate
           // across the section's scroll. speed 0.1 = ±10% of the viewport height.
           if (window.matchMedia("(min-width: 1024px)").matches) {
+            // Horizontal variant: [data-speed-x] slides by ±speed × viewport width.
+            section.querySelectorAll<HTMLElement>("[data-speed-x]").forEach((el) => {
+              const speed = Number(el.dataset.speedX) || 0;
+              gsap.fromTo(
+                el,
+                { x: () => speed * window.innerWidth },
+                {
+                  x: () => -speed * window.innerWidth,
+                  ease: "none",
+                  scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: true, invalidateOnRefresh: true },
+                },
+              );
+            });
             section.querySelectorAll<HTMLElement>("[data-speed]").forEach((el) => {
               const speed = Number(el.dataset.speed) || 0;
               gsap.fromTo(

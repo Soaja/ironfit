@@ -61,17 +61,17 @@ export default function QuizPanel() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const fromArrow = useRef(false);
   const advanceTimer = useRef(0);
-  const firstRender = useRef(true);
+  const shownStep = useRef(0);
 
   const done = step >= TOTAL;
   const result = done ? recommend(answers as QuizAnswers, { services, team, copy: quiz }) : null;
 
-  // Move focus to the new question / result heading (not on first render).
+  // Move focus to the new question / result heading — only when the step
+  // really changed (never on mount: that would scroll the page to the quiz,
+  // e.g. when React re-runs effects in development).
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+    if (shownStep.current === step) return;
+    shownStep.current = step;
     headingRef.current?.focus({ preventScroll: false });
   }, [step]);
 

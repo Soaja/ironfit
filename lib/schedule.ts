@@ -181,3 +181,26 @@ export function buildIcs(opts: {
   ];
   return lines.join("\r\n") + "\r\n";
 }
+
+/**
+ * Compact week summary for footers/contact blocks: consecutive days with the
+ * same hours are grouped. -> [{ days: "Lun–Sab", hours: "07:00–22:00" }, { days: "Dom", hours: "Chiuso" }]
+ */
+export function summarizeHours(openingHours: readonly OpeningHours[]) {
+  const label = (d: number) => capitalize(DAY_SHORT[d - 1]);
+  const hoursText = (d: number) => {
+    const slots = hoursForDay(openingHours, d);
+    return slots.length ? slots.map((s) => `${s.opens}–${s.closes}`).join(", ") : "Chiuso";
+  };
+  const groups: { from: number; to: number; hours: string }[] = [];
+  for (let d = 1; d <= 7; d++) {
+    const h = hoursText(d);
+    const last = groups[groups.length - 1];
+    if (last && last.hours === h && last.to === d - 1) last.to = d;
+    else groups.push({ from: d, to: d, hours: h });
+  }
+  return groups.map((g) => ({
+    days: g.from === g.to ? label(g.from) : `${label(g.from)}–${label(g.to)}`,
+    hours: g.hours,
+  }));
+}

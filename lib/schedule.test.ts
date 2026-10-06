@@ -123,3 +123,24 @@ test("schedule data is valid", () => {
       if (a !== b && a.day === b.day)
         assert.ok(toMinutes(a.end) <= toMinutes(b.start) || toMinutes(b.end) <= toMinutes(a.start), `${a.id} overlaps ${b.id}`);
 });
+
+test("summarizeHours groups consecutive days", async () => {
+  const { summarizeHours } = await import("./schedule.ts");
+  assert.deepEqual(summarizeHours(gym.openingHours), [
+    { days: "Lun–Sab", hours: "07:00–22:00" },
+    { days: "Dom", hours: "Chiuso" },
+  ]);
+  assert.deepEqual(
+    summarizeHours([
+      { days: ["Mo", "We"], opens: "07:00", closes: "13:00" },
+      { days: ["Mo", "We"], opens: "15:00", closes: "21:00" },
+      { days: ["Tu"], opens: "09:00", closes: "21:00" },
+    ]),
+    [
+      { days: "Lun", hours: "07:00–13:00, 15:00–21:00" },
+      { days: "Mar", hours: "09:00–21:00" },
+      { days: "Mer", hours: "07:00–13:00, 15:00–21:00" },
+      { days: "Gio–Dom", hours: "Chiuso" },
+    ],
+  );
+});
