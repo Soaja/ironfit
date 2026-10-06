@@ -1,13 +1,16 @@
-import { Suspense } from "react";
 import Header from "@/components/Header";
 import Functional from "@/components/Functional";
 import Hero from "@/components/Hero";
+import Orari from "@/components/Orari";
 import Percorso from "@/components/Percorso";
 import Team from "@/components/Team";
 import PlaceholderSections from "@/components/PlaceholderSections";
 import Services from "@/components/Services";
 import TrustBar from "@/components/TrustBar";
 
+// No <Suspense> around sections: in the static prerender Next streams every
+// Suspense boundary out of order (hidden <div id="S:…"> + inline swap script),
+// which leaves the content invisible without JavaScript.
 export default function Home() {
   return (
     <>
@@ -18,22 +21,11 @@ export default function Home() {
       <main id="contenuto" tabIndex={-1} className="outline-none">
         <Hero />
         <TrustBar />
-        {/* Below-the-fold sections in their own Suspense boundaries: nothing
-            suspends (the HTML is identical), but React hydrates each boundary
-            as a separate unit and yields in between, so hydration is split
-            into short tasks instead of one long one (lower TBT). */}
-        <Suspense>
-          <Services />
-        </Suspense>
-        <Suspense>
-          <Functional />
-        </Suspense>
-        <Suspense>
-          <Team />
-        </Suspense>
-        <Suspense>
-          <Percorso />
-        </Suspense>
+        <Services />
+        <Functional />
+        <Team />
+        <Percorso />
+        <Orari />
         <PlaceholderSections />
       </main>
     </>

@@ -439,3 +439,69 @@ export const quiz = {
     esperto: "Ti alleni sul serio: ti serve qualcuno che ti spinga oltre il plateau.",
   } satisfies Record<QuizExperience, string>,
 };
+
+// ---------------------------------------------------------------------------
+// Class schedule (Orari). No timetable image was provided, so this is an
+// EXAMPLE week: `isExample` shows "Orari indicativi · in aggiornamento".
+// Replace with the real schedule and set isExample to false.
+// Opening hours of the sala come from `gym.openingHours` (single source).
+// ---------------------------------------------------------------------------
+export type ClassLevel = "tutti" | "principiante" | "intermedio" | "avanzato";
+
+export type ScheduleCategory = { id: string; label: string; color: string };
+
+export type GymClass = {
+  id: string;
+  /** 1 = lunedì … 7 = domenica */
+  day: number;
+  start: string;
+  end: string;
+  name: string;
+  category: string;
+  /** trainer id from `team` (the name is shown only once it's real) */
+  coach?: string;
+  level?: ClassLevel;
+  note?: string;
+};
+
+export const LEVEL_LABEL: Record<ClassLevel, string> = {
+  tutti: "Tutti i livelli",
+  principiante: "Principiante",
+  intermedio: "Intermedio",
+  avanzato: "Avanzato",
+};
+
+export const schedule: { isExample: boolean; categories: ScheduleCategory[]; classes: GymClass[] } = {
+  isExample: true,
+  categories: [
+    { id: "functional", label: "Functional", color: "#F28C28" },
+    // calm sage/teal: 8.3:1 on #141414
+    { id: "yoga", label: "Yoga", color: "#5FBFA3" },
+    { id: "corsi", label: "Corsi", color: "#D7192A" },
+  ],
+  classes: [
+    { id: "lun-fx-am", day: 1, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+    { id: "lun-fx-pm", day: 1, start: "18:30", end: "19:30", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+    { id: "lun-yoga", day: 1, start: "20:00", end: "21:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
+
+    { id: "mar-tb", day: 2, start: "09:30", end: "10:30", name: "Total Body", category: "corsi", coach: "trainer-01", level: "principiante" },
+    { id: "mar-fx-noon", day: 2, start: "13:00", end: "14:00", name: "Functional", category: "functional", coach: "trainer-05", level: "intermedio" },
+    { id: "mar-fx-pm", day: 2, start: "19:00", end: "20:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+
+    { id: "mer-fx-am", day: 3, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+    { id: "mer-yoga", day: 3, start: "18:00", end: "19:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "principiante" },
+    { id: "mer-fx-pm", day: 3, start: "19:30", end: "20:30", name: "Functional", category: "functional", coach: "trainer-03", level: "avanzato" },
+
+    { id: "gio-tb", day: 4, start: "09:30", end: "10:30", name: "Total Body", category: "corsi", coach: "trainer-01", level: "principiante" },
+    { id: "gio-fx-noon", day: 4, start: "13:00", end: "14:00", name: "Functional", category: "functional", coach: "trainer-05", level: "intermedio" },
+    { id: "gio-core", day: 4, start: "18:30", end: "19:15", name: "Core & Mobility", category: "corsi", coach: "trainer-04", level: "tutti" },
+    { id: "gio-fx-pm", day: 4, start: "19:30", end: "20:30", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+
+    { id: "ven-fx-am", day: 5, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
+    { id: "ven-fx-pm", day: 5, start: "18:30", end: "19:30", name: "Functional", category: "functional", coach: "trainer-05", level: "tutti" },
+    { id: "ven-yoga", day: 5, start: "20:00", end: "21:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
+
+    { id: "sab-wod", day: 6, start: "10:00", end: "11:30", name: "Team WOD", category: "functional", coach: "trainer-03", level: "tutti", note: "WOD a coppie, il sabato si suda insieme." },
+    { id: "sab-yoga", day: 6, start: "11:45", end: "12:45", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
+  ],
+};

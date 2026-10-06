@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type RefObject } from "react";
+import { useEffect, useRef, type CSSProperties, type MouseEvent, type RefObject } from "react";
 import { gym, navLinks, telHref, whatsappHref } from "@/data/gym";
 import { InstagramIcon, PhoneIcon, WhatsAppIcon } from "./Icons";
 import LedLines from "./LedLines";
@@ -60,6 +60,22 @@ export default function MobileMenu({ open, activeId, toggleRef, onClose }: Props
     };
   }, [open, onClose, toggleRef]);
 
+  // Close first, scroll after: letting the browser start the anchor scroll
+  // while the page is still scroll-locked made it land hundreds of px off.
+  const goTo = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
+    const target = document.getElementById(id);
+    if (!target || e.metaKey || e.ctrlKey || e.shiftKey) return; // let the browser handle it
+    e.preventDefault();
+    onClose();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+        history.pushState(null, "", `#${id}`);
+      }),
+    );
+  };
+
   const actions = [
     { href: telHref(), label: "Chiama", Icon: PhoneIcon, external: false },
     { href: whatsappHref(), label: "WhatsApp", Icon: WhatsAppIcon, external: true },
@@ -85,7 +101,7 @@ export default function MobileMenu({ open, activeId, toggleRef, onClose }: Props
             <li key={id} className="mobile-menu-item" style={{ "--i": i } as CSSProperties}>
               <a
                 href={`#${id}`}
-                onClick={onClose}
+                onClick={(e) => goTo(e, id)}
                 aria-current={activeId === id ? "location" : undefined}
                 className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2.75rem,13vw,4.5rem)] font-extrabold uppercase leading-[1] text-white aria-[current=location]:text-iron-red"
               >
