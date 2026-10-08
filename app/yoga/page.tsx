@@ -62,9 +62,9 @@ export default function YogaPage() {
 
       <SubSection
         id="orari-yoga"
-        eyebrow="Orari yoga"
+        eyebrow="Orari · Yogalates e Pilates"
         title={["Trova il tuo", "momento."]}
-        intro="Scegli una lezione e prenota il posto su WhatsApp: ti rispondiamo noi."
+        intro="Yogalates e Pilates: scegli una lezione e prenota il posto su WhatsApp, ti rispondiamo noi."
         aside={
           schedule.isExample ? (
             <p className="mt-4 inline-flex border border-white/15 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
@@ -75,7 +75,7 @@ export default function YogaPage() {
         className="bg-iron-black"
       >
         <YogaClasses />
-        <Link href="/#orari?corso=yoga" className="panel-link mt-8 inline-flex">
+        <Link href="/#orari?corso=yogalates" className="panel-link mt-8 inline-flex">
           Calendario completo dei corsi <span aria-hidden="true">→</span>
         </Link>
       </SubSection>

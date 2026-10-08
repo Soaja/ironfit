@@ -3040,3 +3040,26 @@ html[data-intro="fade"] :is([data-reveal], .hero-line-inner) {
 .goals-tab[aria-selected="true"]:focus-visible {
   outline-color: #fff;
 }
+
+/* /yoga: mind-body classes grouped by day */
+.yoga-day {
+  padding: 22px 18px 18px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-top: 2px solid var(--accent);
+  background: #121212;
+}
+
+.yoga-slot {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  background: rgb(255 255 255 / 0.03);
+  transition: background-color 0.2s ease;
+}
+
+.yoga-slot:hover {
+  background: rgb(255 255 255 / 0.07);
+}

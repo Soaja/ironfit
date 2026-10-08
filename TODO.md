@@ -20,7 +20,11 @@ Tutti i valori si inseriscono in `data/gym.ts` (unica fonte di verità).
 
 ### Orari
 - [ ] Orari di apertura reali della sala (`gym.openingHours`, commento `[ORARI DA CONFERMARE]`)
-- [ ] Calendario corsi reale (foto o lista) → sostituire `schedule.classes`, poi `isExample: false`
+- [x] Calendario corsi reale (PDF "IRONFIT CORSI") inserito
+- [ ] Coach e livello per ogni lezione (non presenti nel PDF) → `coach` / `level` in `schedule.classes`
+- [ ] Sabato: davvero nessun corso? (la colonna del PDF è vuota)
+- [ ] Yoga: esiste una lezione di yoga vera e propria o solo Yogalates/Pilates? (la pagina /yoga oggi mostra Yogalates + Pilates)
+- [ ] Boxe è nel calendario ma non è tra i Servizi: aggiungerla come servizio?
 - [ ] WOD del giorno: chi lo aggiorna e come (oggi a mano in `gym.wod`)
 
 ### Numeri (trust bar)
@@ -63,7 +67,6 @@ Tutti i valori si inseriscono in `data/gym.ts` (unica fonte di verità).
 ## Problemi noti
 - Lighthouse mobile Performance ~83–88 (Accessibility/Best Practices/SEO 100): il limite è il runtime Next/React (~120 KB gz). Da rimisurare in produzione su Vercel.
 - Rate limit del form in memoria: per istanza, si azzera ai riavvii (ok per un sito piccolo; valutare Turnstile/Upstash se arriva spam).
-- Calendario corsi di esempio visibile con etichetta "Orari indicativi · in aggiornamento".
 - FAQ: animazione di altezza (eccezione voluta alla regola transform/opacity).
 - Galleria filtrata con numero dispari di foto può lasciare una cella vuota in fondo.
 - Ritratti del team non gradati (il grade nero/rosso rende la pelle grigia).

@@ -24,7 +24,7 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 - `components/LedLines.tsx` — coordinate `LED_SEGMENTS` tracciate sulle vere strisce LED del soffitto (master 2560×1920).
 
 ## Brand
-- Colori: nero #0A0A0A, rosso #D7192A, bianco, grigi #1A1A1A / #6B6B6B / #E8E8E8. **Ambra #F28C28 solo in Functional/WOD** (e categoria functional negli orari). Yoga negli orari: #5FBFA3.
+- Colori: nero #0A0A0A, rosso #D7192A, bianco, grigi #1A1A1A / #6B6B6B / #E8E8E8. **Ambra #F28C28 solo in Functional/WOD** (e categoria functional negli orari). Categorie orari: Crosstraining #F28C28, Pilates #B39DDB, Yogalates #5FBFA3, Boxe #D7192A.
 - Font: Barlow Condensed 800 maiuscolo (display) · Inter 400/500/600 (testo) · Permanent Marker solo nella card WOD (caricato tardi).
 - Motivo: poligono aperto di strisce LED (dal soffitto reale), grana `.hero-grain`, punto finale rosso nei titoli (glifo ".", non un cerchio).
 - Tono: diretto, sicuro, un po' sfacciato ("Allenati sul serio.").
@@ -59,7 +59,7 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 | Functional + WOD | ✅ | timer 7 segmenti, WOD in gym.ts (aggiornare a mano) |
 | Team | ✅ | flip card, dati trainer placeholder |
 | Quiz "Trova il tuo percorso" | ✅ | `lib/recommend.ts`, 48 combinazioni testate |
-| Orari | ✅ | **calendario corsi di esempio** (`schedule.isExample = true`) |
+| Orari | ✅ | calendario reale dal PDF "IRONFIT CORSI" (31 lezioni lun–ven: Crosstraining, Pilates, Yogalates, Boxe) |
 | Galleria | ✅ | 15 foto, lightbox |
 | Recensioni | ✅ | stato vuoto (solo CTA) finché non ci sono dati reali |
 | FAQ | ✅ | 4 risposte `[DA CONFERMARE]` escluse dal JSON-LD |
@@ -69,7 +69,7 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 | Mobile sticky bar | ✅ | |
 | /privacy | 🟡 | shell con placeholder testo, noindex (`legal.pagesReady`) |
 | /cookie | 🟡 | come /privacy |
-| /yoga | ✅ | accento salvia #5FBFA3, "Respira con noi" (box breathing, `lib/breath.ts`), lezioni da `schedule` |
+| /yoga | ✅ | accento salvia #5FBFA3, "Respira con noi" (box breathing, `lib/breath.ts`), lezioni Yogalates + Pilates da `schedule` |
 | /nutrizione | ✅ | accento rosso, selettore obiettivi (tabs), 3 passi "indicativo" (`nutritionPage.stepsConfirmed`) |
 
 **Prezzi: rimossa per scelta del cliente** (nessuna sezione, nessun link). Non ricrearla.

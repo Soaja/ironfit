@@ -226,7 +226,7 @@ export default function Timetable() {
                               {c.start}–{c.end}
                             </span>
                             <span className="tt-name">{c.name}</span>
-                            <span className="tt-cat">{CATEGORY[c.category]?.label}</span>
+                            {CATEGORY[c.category]?.label !== c.name && <span className="tt-cat">{CATEGORY[c.category]?.label}</span>}
                             <ClassMeta c={c} />
                           </button>
                         );
@@ -283,7 +283,7 @@ export default function Timetable() {
                           <span className="block text-xs font-medium text-white/50">{c.end}</span>
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="tt-cat">{CATEGORY[c.category]?.label}</span>
+                          {CATEGORY[c.category]?.label !== c.name && <span className="tt-cat">{CATEGORY[c.category]?.label}</span>}
                           <span className="tt-name">{c.name}</span>
                           <span className="flex flex-wrap gap-x-3">
                             <ClassMeta c={c} />

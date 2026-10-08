@@ -43,19 +43,21 @@ test("hoursForDay", () => {
 });
 
 test("nextClass: later today, tomorrow, after the weekend, and wrap to next week", () => {
+  // Mon 18:15: Crosstraining 18:00 already started -> next is 19:00
   let n = nextClass(MON_1815, schedule.classes, TZ)!;
-  assert.equal(n.cls.id, "lun-fx-pm");
-  assert.equal(n.minutesUntil, 15);
-  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Tra 15 min");
+  assert.equal(n.cls.id, "lun-cross-1900");
+  assert.equal(n.minutesUntil, 45);
+  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Tra 45 min");
 
   n = nextClass(MON_2230, schedule.classes, TZ)!;
-  assert.equal(n.cls.id, "mar-tb");
-  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Domani alle 09:30");
+  assert.equal(n.cls.id, "mar-yogalates");
+  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Domani alle 08:30");
 
+  // Saturday has no classes on the sheet -> Monday 09:30
   n = nextClass(SAT_1300, schedule.classes, TZ)!;
-  assert.equal(n.cls.id, "lun-fx-am");
+  assert.equal(n.cls.id, "lun-cross-0930");
   assert.equal(n.dayOffset, 2);
-  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Lunedì alle 07:00");
+  assert.equal(formatUntil(n.minutesUntil, n.dayOffset, n.cls.day, n.cls.start), "Lunedì alle 09:30");
 
   // only one class, already started today -> same day next week
   const only = [{ id: "x", day: 1, start: "07:00", end: "08:00" }];
@@ -63,6 +65,13 @@ test("nextClass: later today, tomorrow, after the weekend, and wrap to next week
   assert.equal(n.dayOffset, 7);
   assert.equal(n.minutesUntil, 7 * 1440 - 60);
   assert.equal(nextClass(MON_1815, [], TZ), null);
+});
+
+test("schedule matches the gym sheet: 31 classes, Mon–Fri, nothing on weekends", () => {
+  assert.equal(schedule.classes.length, 31);
+  assert.ok(schedule.classes.every((c) => c.day >= 1 && c.day <= 5));
+  const count = (cat: string) => schedule.classes.filter((c) => c.category === cat).length;
+  assert.deepEqual([count("crosstraining"), count("pilates"), count("yogalates"), count("boxe")], [15, 11, 2, 3]);
 });
 
 test("formatUntil", () => {

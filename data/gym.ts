@@ -461,9 +461,8 @@ export const quiz = {
 };
 
 // ---------------------------------------------------------------------------
-// Class schedule (Orari). No timetable image was provided, so this is an
-// EXAMPLE week: `isExample` shows "Orari indicativi · in aggiornamento".
-// Replace with the real schedule and set isExample to false.
+// Class schedule (Orari). Set `isExample: true` only for placeholder data:
+// it shows "Orari indicativi · in aggiornamento".
 // Opening hours of the sala come from `gym.openingHours` (single source).
 // ---------------------------------------------------------------------------
 export type ClassLevel = "tutti" | "principiante" | "intermedio" | "avanzato";
@@ -492,37 +491,57 @@ export const LEVEL_LABEL: Record<ClassLevel, string> = {
 };
 
 export const schedule: { isExample: boolean; categories: ScheduleCategory[]; classes: GymClass[] } = {
-  isExample: true,
+  // Real timetable, transcribed from "IRONFIT CORSI" (PDF from the gym, Oct 2026).
+  // Course names as written there. Coaches and levels are not on the sheet:
+  // add `coach` / `level` once known. Saturday: no classes on the sheet.
+  isExample: false,
   categories: [
-    { id: "functional", label: "Functional", color: "#F28C28" },
-    // calm sage/teal: 8.3:1 on #141414
-    { id: "yoga", label: "Yoga", color: "#5FBFA3" },
-    { id: "corsi", label: "Corsi", color: "#D7192A" },
+    // Crosstraining happens in the functional area: same amber as the WOD.
+    { id: "crosstraining", label: "Crosstraining", color: "#F28C28" },
+    { id: "pilates", label: "Pilates", color: "#B39DDB" }, // lavender, 7.8:1 on #141414
+    { id: "yogalates", label: "Yogalates", color: "#5FBFA3" }, // sage = yoga colour
+    { id: "boxe", label: "Boxe", color: "#D7192A" },
   ],
   classes: [
-    { id: "lun-fx-am", day: 1, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-    { id: "lun-fx-pm", day: 1, start: "18:30", end: "19:30", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-    { id: "lun-yoga", day: 1, start: "20:00", end: "21:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
-
-    { id: "mar-tb", day: 2, start: "09:30", end: "10:30", name: "Total Body", category: "corsi", coach: "trainer-01", level: "principiante" },
-    { id: "mar-fx-noon", day: 2, start: "13:00", end: "14:00", name: "Functional", category: "functional", coach: "trainer-05", level: "intermedio" },
-    { id: "mar-fx-pm", day: 2, start: "19:00", end: "20:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-
-    { id: "mer-fx-am", day: 3, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-    { id: "mer-yoga", day: 3, start: "18:00", end: "19:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "principiante" },
-    { id: "mer-fx-pm", day: 3, start: "19:30", end: "20:30", name: "Functional", category: "functional", coach: "trainer-03", level: "avanzato" },
-
-    { id: "gio-tb", day: 4, start: "09:30", end: "10:30", name: "Total Body", category: "corsi", coach: "trainer-01", level: "principiante" },
-    { id: "gio-fx-noon", day: 4, start: "13:00", end: "14:00", name: "Functional", category: "functional", coach: "trainer-05", level: "intermedio" },
-    { id: "gio-core", day: 4, start: "18:30", end: "19:15", name: "Core & Mobility", category: "corsi", coach: "trainer-04", level: "tutti" },
-    { id: "gio-fx-pm", day: 4, start: "19:30", end: "20:30", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-
-    { id: "ven-fx-am", day: 5, start: "07:00", end: "08:00", name: "Functional", category: "functional", coach: "trainer-03", level: "tutti" },
-    { id: "ven-fx-pm", day: 5, start: "18:30", end: "19:30", name: "Functional", category: "functional", coach: "trainer-05", level: "tutti" },
-    { id: "ven-yoga", day: 5, start: "20:00", end: "21:00", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
-
-    { id: "sab-wod", day: 6, start: "10:00", end: "11:30", name: "Team WOD", category: "functional", coach: "trainer-03", level: "tutti", note: "WOD a coppie, il sabato si suda insieme." },
-    { id: "sab-yoga", day: 6, start: "11:45", end: "12:45", name: "Yoga", category: "yoga", coach: "trainer-05", level: "tutti" },
+    // 08:30–09:30
+    { id: "mar-yogalates", day: 2, start: "08:30", end: "09:30", name: "Yogalates", category: "yogalates" },
+    { id: "gio-yogalates", day: 4, start: "08:30", end: "09:30", name: "Yogalates", category: "yogalates" },
+    // 09:30–10:30
+    { id: "lun-cross-0930", day: 1, start: "09:30", end: "10:30", name: "Crosstraining", category: "crosstraining" },
+    { id: "mer-cross-0930", day: 3, start: "09:30", end: "10:30", name: "Crosstraining", category: "crosstraining" },
+    { id: "ven-cross-0930", day: 5, start: "09:30", end: "10:30", name: "Crosstraining", category: "crosstraining" },
+    // 10:30–11:30
+    { id: "lun-pilates-1030", day: 1, start: "10:30", end: "11:30", name: "Pilates", category: "pilates" },
+    { id: "mer-pilates-1030", day: 3, start: "10:30", end: "11:30", name: "Pilates", category: "pilates" },
+    { id: "ven-pilates-1030", day: 5, start: "10:30", end: "11:30", name: "Pilates", category: "pilates" },
+    // 13:30–14:30
+    { id: "lun-cross-1330", day: 1, start: "13:30", end: "14:30", name: "Crosstraining", category: "crosstraining" },
+    { id: "mer-cross-1330", day: 3, start: "13:30", end: "14:30", name: "Crosstraining", category: "crosstraining" },
+    { id: "ven-cross-1330", day: 5, start: "13:30", end: "14:30", name: "Crosstraining", category: "crosstraining" },
+    // 17:00–18:00
+    { id: "lun-pilates-1700", day: 1, start: "17:00", end: "18:00", name: "Pilates", category: "pilates" },
+    { id: "mar-pilates-1700", day: 2, start: "17:00", end: "18:00", name: "Pilates", category: "pilates" },
+    { id: "mer-pilates-1700", day: 3, start: "17:00", end: "18:00", name: "Pilates", category: "pilates" },
+    { id: "gio-pilates-1700", day: 4, start: "17:00", end: "18:00", name: "Pilates", category: "pilates" },
+    { id: "ven-pilates-1700", day: 5, start: "17:00", end: "18:00", name: "Pilates", category: "pilates" },
+    // 18:00–19:00
+    { id: "lun-cross-1800", day: 1, start: "18:00", end: "19:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "mar-cross-1800", day: 2, start: "18:00", end: "19:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "mer-cross-1800", day: 3, start: "18:00", end: "19:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "gio-cross-1800", day: 4, start: "18:00", end: "19:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "ven-cross-1800", day: 5, start: "18:00", end: "19:00", name: "Crosstraining", category: "crosstraining" },
+    // 19:00–20:00
+    { id: "lun-cross-1900", day: 1, start: "19:00", end: "20:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "mar-pilates-1900", day: 2, start: "19:00", end: "20:00", name: "Pilates", category: "pilates" },
+    { id: "mer-pilates-1900", day: 3, start: "19:00", end: "20:00", name: "Pilates", category: "pilates" },
+    { id: "gio-pilates-1900", day: 4, start: "19:00", end: "20:00", name: "Pilates", category: "pilates" },
+    { id: "ven-cross-1900", day: 5, start: "19:00", end: "20:00", name: "Crosstraining", category: "crosstraining" },
+    // 20:00–21:00
+    { id: "lun-boxe", day: 1, start: "20:00", end: "21:00", name: "Boxe", category: "boxe" },
+    { id: "mar-cross-2000", day: 2, start: "20:00", end: "21:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "mer-boxe", day: 3, start: "20:00", end: "21:00", name: "Boxe", category: "boxe" },
+    { id: "gio-cross-2000", day: 4, start: "20:00", end: "21:00", name: "Crosstraining", category: "crosstraining" },
+    { id: "ven-boxe", day: 5, start: "20:00", end: "21:00", name: "Boxe", category: "boxe" },
   ],
 };
 
