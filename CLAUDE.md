@@ -46,6 +46,8 @@ Vedi anche `TODO.md` (dati mancanti, prossimi passi, problemi noti).
 ## Verifica predefinita (versione leggera)
 - Usa il dev server già avviato (localhost:3000), non avviarne un secondo.
 - Screenshot Playwright solo a 375×812 e 1440×900, stato finale.
+- Per iPhone usare **WebKit** (motore di Safari): `node .verify/iphone.mjs` (SE 320, SE 3rd gen, iPhone 16, 16 Pro Max) e `node .verify/ios-smoke.mjs`.
+- iPhone: `viewportFit: "cover"` + `env(safe-area-inset-*)` (gutter e barre fisse); input ≥16px (niente zoom); tap target ≥44px; hero `min-height: max(560px, 100svh)` e cresce se il testo non ci sta.
 - Max 2 iterazioni di fix; niente Lighthouse salvo richiesta; `npm test` per la logica pura; un solo `npm run build` alla fine.
 - Commit alla fine con messaggio chiaro; mai `git push` senza chiedere.
 

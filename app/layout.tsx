@@ -68,6 +68,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: "#0A0A0A",
   colorScheme: "dark",
+  // edge-to-edge on iPhone (notch, home indicator); fixed bars use env(safe-area-inset-*)
+  viewportFit: "cover",
 };
 
 const SCHEMA_DAYS: Record<DayCode, DayOfWeek> = {

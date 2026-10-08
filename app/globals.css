@@ -287,10 +287,17 @@ body {
 }
 
 /* ---------- Hero ---------- */
+.hero-content {
+  flex: 1 0 auto;
+  height: auto;
+}
+
 .hero {
   position: relative;
-  height: 100svh;
-  min-height: 640px;
+  /* one screen tall, but grows when the copy needs more room (iPhone SE) */
+  display: flex;
+  flex-direction: column;
+  min-height: max(560px, 100svh);
   overflow: hidden;
   isolation: isolate;
   background: var(--color-iron-black);
@@ -1652,7 +1659,7 @@ body {
 }
 
 .tt-tab-today {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -2487,7 +2494,7 @@ select.cf-input {
 }
 
 .sub-hero {
-  min-height: max(640px, 92svh);
+  min-height: max(560px, 92svh);
   background: #0b0b0b;
 }
 
@@ -3062,4 +3069,64 @@ html[data-intro="fade"] :is([data-reveal], .hero-line-inner) {
 
 .yoga-slot:hover {
   background: rgb(255 255 255 / 0.07);
+}
+
+/* ---------- iPhone / small-phone refinements ---------- */
+/* Larger hit areas for inline links without changing the layout (≥44px). */
+.footer-link,
+.contact-link,
+.site-footer .text-xs {
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
+}
+
+/* Landscape iPhone: keep content clear of the notch (viewport-fit=cover). */
+:root {
+  --gutter: max(20px, env(safe-area-inset-left), env(safe-area-inset-right));
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: max(32px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: max(48px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --gutter: max(72px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 379px) {
+  /* eyebrows: tighter tracking so they stay on one line */
+  .tracking-\[0\.22em\] {
+    letter-spacing: 0.14em;
+  }
+
+  /* bottom bar: three actions must fit 320px */
+  .mbar {
+    gap: 4px;
+    padding-inline: 6px;
+  }
+
+  .mbar-btn {
+    gap: 5px;
+    font-size: 13px;
+  }
+
+  .mbar-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-title {
+    font-size: 52px;
+  }
 }

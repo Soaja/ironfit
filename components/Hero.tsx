@@ -36,7 +36,7 @@ export default function Hero() {
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
 
-      <div className="relative z-10 flex h-full items-end justify-between gap-10 px-[var(--gutter)] pb-[calc(var(--marquee-h)+clamp(28px,4.5svh,44px))] pt-[calc(var(--header-h)+16px)] lg:pb-[calc(var(--marquee-h)+clamp(40px,6svh,64px))]">
+      <div className="hero-content relative z-10 flex h-full items-end justify-between gap-10 px-[var(--gutter)] pb-[calc(var(--marquee-h)+clamp(28px,4.5svh,44px))] pt-[calc(var(--header-h)+16px)] lg:pb-[calc(var(--marquee-h)+clamp(40px,6svh,64px))]">
         <div className="max-w-[760px]">
           <h1 id="hero-title" className="hero-title">
             <span
